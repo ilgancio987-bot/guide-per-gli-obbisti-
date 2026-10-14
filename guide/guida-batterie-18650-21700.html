@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Batterie 18650 e 21700</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--paper:#151b24;--paper2:#1c2430;--ink:#e8edf3;--muted:#9aa7b6;--line:#2b3644;--accent:#a3e635;--accent2:#fbbf24;--ok:#36d399;--danger:#f87171;--blue:#60a5fa;--pos:#ef4444;--neg:#3b82f6}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 Inter,system-ui,sans-serif}
+a{color:var(--accent)}
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;z-index:20}
+header.cover{min-height:90vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 16px;background:radial-gradient(circle at 50% 35%,#24330f 0,var(--bg) 62%)}
+.cover h1{font:800 clamp(2.1rem,7.5vw,4.4rem)/1.05 Inter;margin:.3em 0;letter-spacing:-.02em}
+.cover h1 span{color:var(--accent)}
+.cover .sub{font-family:Merriweather;font-style:italic;color:var(--muted);max-width:600px}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:4px 14px;font-size:.8rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase}
+.hero{width:min(420px,90vw);margin-top:24px}
+.hc{animation:drop .8s cubic-bezier(.3,1.4,.6,1) both}
+@keyframes drop{from{transform:translateY(-60px);opacity:0}to{transform:none;opacity:1}}
+nav.toc{max-width:880px;margin:0 auto;padding:30px 16px}
+.toc ol{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.toc a{display:flex;gap:12px;align-items:center;padding:12px 16px;background:var(--paper);border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--ink);transition:.2s}
+.toc a:hover{border-color:var(--accent);transform:translateX(4px)}
+.toc .n{font:600 .8rem JetBrains Mono;color:var(--accent);min-width:28px}
+.toc .part{font:600 .7rem JetBrains Mono;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin:14px 0 2px}
+main{max-width:880px;margin:0 auto;padding:0 16px 80px}
+section.chap{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 22px;margin:28px 0;opacity:0;transform:translateY(30px);transition:.7s}
+section.chap.in{opacity:1;transform:none}
+.kick{font:600 .75rem JetBrains Mono;color:var(--accent);letter-spacing:.2em;text-transform:uppercase}
+.chap h2{font:800 1.8rem/1.2 Inter;margin:.2em 0 .6em}
+.chap h3{font-size:1.15rem;margin:1.6em 0 .4em;color:var(--accent2)}
+.chap p,.chap li{font-family:Merriweather;font-size:.98rem}
+.note,.warn,.tip{border-radius:12px;padding:14px 16px;margin:16px 0;font-size:.95rem;border-left:4px solid}
+.note{background:#132235;border-color:var(--blue)}.warn{background:#2a1517;border-color:var(--danger)}.tip{background:#13261d;border-color:var(--ok)}
+.note b:first-child,.warn b:first-child,.tip b:first-child{display:block;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin:12px 0}
+th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{color:var(--muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em}
+td.v{font:600 .85rem JetBrains Mono;color:var(--accent2);white-space:nowrap}
+.tablewrap{overflow-x:auto}
+.mono{font-family:JetBrains Mono;font-size:.88em;background:var(--paper2);padding:1px 6px;border-radius:5px}
+.svgbox{background:#0a0e14;border:1px solid var(--line);border-radius:14px;padding:10px;margin:16px 0;overflow-x:auto}
+.svgbox svg{display:block;width:100%;height:auto;min-width:560px}
+.cap{font-size:.86rem;color:var(--muted);margin:-6px 0 14px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+button{background:var(--paper2);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:7px 14px;font:600 .82rem Inter;cursor:pointer}
+button.on{background:var(--accent);color:#0d1117;border-color:var(--accent)}
+input[type=number],input[type=search],select{background:var(--paper2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;width:100%}
+label.f{display:block;font-size:.78rem;color:var(--muted);margin-bottom:4px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:14px 0}
+.stat{background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat .v{font:800 1.3rem JetBrains Mono;color:var(--accent)}
+.stat .l{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.col{background:var(--paper2);border-radius:14px;padding:14px 16px;border-top:4px solid}
+.col h4{margin:0 0 8px;font-size:1.05rem}
+.col ul{margin:0;padding-left:18px}.col li{font-family:Inter;font-size:.9rem;margin:6px 0}
+.col.do{border-color:var(--ok)}.col.dont{border-color:var(--danger)}
+.check li,.shop li{list-style:none;display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line)}
+.check ul,.shop ul{padding:0;margin:0}
+.check input,.shop input{width:22px;height:22px;accent-color:var(--accent);flex:0 0 auto;margin-top:2px}
+.shop .qty{font:600 .8rem JetBrains Mono;color:var(--accent2);white-space:nowrap}
+.shop .price{margin-left:auto;font:600 .85rem JetBrains Mono;color:var(--muted);white-space:nowrap}
+.shop .d{font-size:.8rem;color:var(--muted)}
+.check li.done span,.shop li.done .t{text-decoration:line-through;opacity:.5}
+.total{display:flex;justify-content:space-between;padding:14px;background:var(--paper2);border-radius:12px;margin-top:12px;font-weight:600}
+.steptxt{min-height:76px;background:var(--paper2);border-radius:12px;padding:12px 14px;font-family:Merriweather;font-size:.95rem}
+.steptxt b{color:var(--accent)}
+.tag{display:inline-block;font:600 .68rem JetBrains Mono;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}
+.tag.b{color:var(--ok)}.tag.g{color:var(--accent2)}.tag.f{color:var(--danger)}.tag.r{color:var(--blue)}.tag.l{color:#c084fc}
+.cellpic{width:110px;display:block}
+.step{display:grid;grid-template-columns:44px 1fr;gap:14px;margin:20px 0}
+.step .num{width:44px;height:44px;border-radius:50%;background:var(--paper2);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font:800 1rem JetBrains Mono;color:var(--accent)}
+.step h4{margin:8px 0 6px;font-size:1.05rem}
+.step ul{padding-left:18px;margin:6px 0}
+.flow{stroke-dasharray:6 8;animation:flow .8s linear infinite}@keyframes flow{to{stroke-dashoffset:-28}}
+.pop{animation:pop .4s ease-out both}@keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+.footer{text-align:center;color:var(--muted);font-size:.8rem;padding:30px 16px 60px}
+@media print{.progress,.btns{display:none}section.chap{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+
+<header class="cover">
+  <span class="badge">Manuale · Volume 5</span>
+  <h1>Batterie con celle<br><span>18650</span> e <span>21700</span></h1>
+  <p class="sub">Progettare e costruire pacchi di qualsiasi tensione e capacità: celle di marca, generiche e di recupero, schemi automatici, lista materiali e tutto ciò che si deve e non si deve fare.</p>
+  <svg class="hero" id="heroSvg" viewBox="0 0 420 170"></svg>
+</header>
+
+<nav class="toc"><ol>
+  <li class="part">Parte I · Conoscere le celle</li>
+  <li><a href="#c1"><span class="n">01</span>Com'è fatta una cella cilindrica</a></li>
+  <li><a href="#c2"><span class="n">02</span>18650 o 21700?</a></li>
+  <li><a href="#c3"><span class="n">03</span>Chimiche e tensioni</a></li>
+  <li><a href="#c4"><span class="n">04</span>Catalogo celle: di marca, generiche, false</a></li>
+  <li><a href="#c5"><span class="n">05</span>Riconoscere le celle false</a></li>
+  <li><a href="#c6"><span class="n">06</span>Celle di recupero (portatili, power bank)</a></li>
+  <li class="part">Parte II · Progettare</li>
+  <li><a href="#c7"><span class="n">07</span>Progettista del pacco (calcolatore)</a></li>
+  <li><a href="#c8"><span class="n">08</span>Schema di montaggio automatico</a></li>
+  <li><a href="#c9"><span class="n">09</span>Configurazioni più comuni</a></li>
+  <li><a href="#c10"><span class="n">10</span>Lista materiali del tuo pacco</a></li>
+  <li class="part">Parte III · Costruire</li>
+  <li><a href="#c11"><span class="n">11</span>Il montaggio animato</a></li>
+  <li><a href="#c12"><span class="n">12</span>Procedimento scritto completo</a></li>
+  <li><a href="#c13"><span class="n">13</span>Cosa fare e cosa non fare</a></li>
+  <li><a href="#c14"><span class="n">14</span>Ricarica, conservazione, smaltimento</a></li>
+</ol></nav>
+
+<main>
+
+<!-- 1 -->
+<section class="chap" id="c1">
+  <div class="kick">Capitolo 01</div>
+  <h2>Com'è fatta una cella cilindrica</h2>
+  <p>Il nome dice le misure: <b>18650</b> = 18 mm di diametro × 65,0 mm di lunghezza; <b>21700</b> = 21 mm × 70,0 mm. Dentro, due lunghi nastri (anodo e catodo) separati da una pellicola sottilissima sono arrotolati come un tappeto e immersi nell'elettrolito.</p>
+  <div class="btns"><button id="cutBtn" class="on">Mostra sezione</button><button id="cutBtn2">Vista esterna</button></div>
+  <div class="svgbox"><svg id="anatomy" viewBox="0 0 620 260"></svg></div>
+  <div class="tablewrap"><table>
+    <tr><th>Parte</th><th>Cosa fa</th><th>Perché ti interessa</th></tr>
+    <tr><td>Cappellotto positivo (+)</td><td>Contatto positivo</td><td>Sotto ci sono CID e valvola: <b>non saldare a stagno, non premere forte</b></td></tr>
+    <tr><td>CID (interruttore di sicurezza)</td><td>Interrompe la cella se la pressione interna sale</td><td>Il calore del saldatore può farlo scattare: la cella diventa a 0 V per sempre</td></tr>
+    <tr><td>Valvola di sfiato</td><td>Fa uscire i gas in caso di guasto</td><td>Non coprire mai il polo + con colla o resina</td></tr>
+    <tr><td>Anello isolante</td><td>Separa il + dal bordo del contenitore (che è −)</td><td>È il punto più fragile: la rondella di fishpaper lo protegge</td></tr>
+    <tr><td>Contenitore in acciaio (−)</td><td>Tutto il corpo della cella è il polo negativo</td><td>Se la guaina si rovina, il corpo tocca altre parti: cortocircuito</td></tr>
+    <tr><td>Guaina (wrap) in PVC</td><td>Isolamento esterno e stampa del modello</td><td>Una guaina strappata si sostituisce prima di usare la cella</td></tr>
+    <tr><td>Jelly roll (avvolgimento)</td><td>Anodo + separatore + catodo arrotolati</td><td>Urti e cadute possono danneggiarlo internamente senza segni esterni</td></tr>
+  </table></div>
+</section>
+
+<!-- 2 -->
+<section class="chap" id="c2">
+  <div class="kick">Capitolo 02</div>
+  <h2>18650 o 21700?</h2>
+  <div class="svgbox"><svg id="sizeCmp" viewBox="0 0 620 230"></svg></div>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>18650</th><th>21700</th></tr>
+    <tr><td>Dimensioni</td><td class="v">18 × 65 mm</td><td class="v">21 × 70 mm</td></tr>
+    <tr><td>Volume</td><td class="v">~16,5 cm³</td><td class="v">~24,2 cm³ (+47%)</td></tr>
+    <tr><td>Peso tipico</td><td class="v">44–50 g</td><td class="v">65–72 g</td></tr>
+    <tr><td>Capacità reali (oggi)</td><td class="v">2500–3500 mAh</td><td class="v">4000–5000+ mAh</td></tr>
+    <tr><td>Corrente massima tipica</td><td class="v">10–36 A</td><td class="v">10–60 A</td></tr>
+    <tr><td>Celle per 1 kWh (circa)</td><td class="v">~95</td><td class="v">~55</td></tr>
+    <tr><td>Saldature necessarie</td><td>Molte di più</td><td>~40% in meno</td></tr>
+    <tr><td>Quando sceglierla</td><td>Spazi stretti, recupero celle, porta‑lampade, pacchi piccoli</td><td>Nuovi progetti e‑bike/monopattino, accumulo, alte correnti</td></tr>
+  </table></div>
+  <div class="tip"><b>In breve</b>Per un progetto nuovo la 21700 conviene quasi sempre: meno celle, meno saldature, meno punti deboli, stesso costo per Wh o poco più. La 18650 resta la scelta giusta quando lo spazio è stretto o per recuperare celle esistenti.</div>
+</section>
+
+<!-- 3 -->
+<section class="chap" id="c3">
+  <div class="kick">Capitolo 03</div>
+  <h2>Chimiche e tensioni</h2>
+  <p>Le celle 18650 e 21700 esistono in diverse chimiche. Le tensioni cambiano, e con esse BMS e caricatore: <b>mai mescolare chimiche diverse in un pacco.</b></p>
+  <div class="svgbox"><svg id="chemSvg" viewBox="0 0 620 230"></svg></div>
+  <div class="tablewrap"><table>
+    <tr><th>Chimica</th><th>Sigla sulla cella</th><th>Nominale</th><th>Piena</th><th>Vuota</th><th>Pro</th><th>Contro</th></tr>
+    <tr><td>Li‑ion NMC / NCA</td><td>INR, ICR, NCR</td><td class="v">3,6–3,7 V</td><td class="v">4,20 V</td><td class="v">2,5–3,0 V</td><td>Alta energia, la più diffusa</td><td>Più sensibile a calore e abusi</td></tr>
+    <tr><td>LiFePO4 (LFP)</td><td>IFR, IFP</td><td class="v">3,2 V</td><td class="v">3,60–3,65 V</td><td class="v">2,5 V</td><td>Molto sicura, migliaia di cicli</td><td>Circa metà dell'energia per cella</td></tr>
+    <tr><td>LTO</td><td>(raro in questi formati)</td><td class="v">2,4 V</td><td class="v">2,8 V</td><td class="v">1,5 V</td><td>Ricarica velocissima, freddo</td><td>Poca energia, costosa</td></tr>
+  </table></div>
+  <div class="note"><b>La regola dei volt</b>Tensione del pacco = numero di celle in serie (S) × tensione della singola cella. Un 13S Li‑ion fa 46,8 V nominali e 54,6 V pieno: lo chiamano "48 V". Un 4S LFP fa 12,8 V nominali: è il classico "12 V al litio".</div>
+</section>
+
+<!-- 4 -->
+<section class="chap" id="c4">
+  <div class="kick">Capitolo 04</div>
+  <h2>Catalogo celle: di marca, generiche, false</h2>
+  <p>Valori di <b>datasheet</b> (capacità nominale e corrente continua dichiarata). Il prezzo è indicativo per cella nuova in Europa da rivenditore affidabile. Le celle generiche hanno valori tipici, non garantiti.</p>
+  <div class="row">
+    <div><label class="f">Cerca</label><input type="search" id="cq" placeholder="es. Samsung, P45B, recupero…"></div>
+    <div><label class="f">Formato</label><select id="cf"><option value="">Tutti</option><option>18650</option><option>21700</option></select></div>
+    <div><label class="f">Tipo</label><select id="ct"><option value="">Tutti</option><option value="b">Di marca</option><option value="g">Generiche</option><option value="r">Recupero</option><option value="f">False</option><option value="l">LiFePO4</option></select></div>
+    <div><label class="f">Ordina</label><select id="cs"><option value="mah">Capacità ↓</option><option value="a">Corrente ↓</option><option value="eur">Prezzo ↑</option><option value="whe">Wh per € ↓</option></select></div>
+  </div>
+  <div class="tablewrap"><table id="cellTable"></table></div>
+  <div class="note"><b>Capacità o corrente: non puoi avere tutto</b>Le celle ad alta capacità (35E, MJ1, 50E, M50LT) reggono poca corrente; quelle ad alta corrente (25R, P28A, 40T) hanno meno capacità. Le Molicel P45B/P50B sono l'eccezione moderna: alte in entrambe, ma costano di più.</div>
+</section>
+
+<!-- 5 -->
+<section class="chap" id="c5">
+  <div class="kick">Capitolo 05</div>
+  <h2>Riconoscere le celle false</h2>
+  <p>Il mercato online è pieno di celle con capacità impossibili. Una 18650 vera arriva oggi a circa <b>3500–3600 mAh</b>; una 21700 a circa <b>5000–5800 mAh</b>. Tutto ciò che dichiara di più è falso.</p>
+  <div class="btns"><button id="scaleBtn" class="on">⚖️ Pesa le celle</button></div>
+  <div class="svgbox"><svg id="scaleSvg" viewBox="0 0 620 250"></svg></div>
+  <div class="tablewrap"><table>
+    <tr><th>Indizio</th><th>Cella vera</th><th>Cella falsa</th></tr>
+    <tr><td>Capacità dichiarata</td><td>18650 ≤ 3500 · 21700 ≤ 5000/5800</td><td>"6800", "9900", "12000 mAh"</td></tr>
+    <tr><td>Peso</td><td>18650: 44–50 g · 21700: 65–72 g</td><td>18650: 20–35 g · 21700: 30–50 g (spesso sabbia o una cella più piccola dentro)</td></tr>
+    <tr><td>Marca</td><td>Samsung, LG, Murata/Sony, Panasonic, Molicel, EVE, Lishen, BAK, Ampace…</td><td>"UltraFire", "GTF", "Fire", nomi sempre diversi e brillanti</td></tr>
+    <tr><td>Prezzo</td><td>3–8 € a cella</td><td>"10 celle per 15 €"</td></tr>
+    <tr><td>Stampa e guaina</td><td>Codice lotto/data inciso o stampato, guaina precisa</td><td>Stampa sbavata, guaina lucida colorata senza codici</td></tr>
+    <tr><td>Test di capacità</td><td>Vicino al dichiarato (±5%)</td><td>Un decimo o un quinto del dichiarato</td></tr>
+  </table></div>
+  <div class="warn"><b>⚠ Anche le "di marca" possono essere false</b>Esistono celle rietichettate: una cella economica con la guaina "Samsung 30Q" o "LG HG2" stampata sopra. Compra solo da rivenditori specializzati che pubblicano i loro test, controlla peso e capacità su qualche cella campione prima di montarle.</div>
+</section>
+
+<!-- 6 -->
+<section class="chap" id="c6">
+  <div class="kick">Capitolo 06</div>
+  <h2>Celle di recupero (portatili, power bank, attrezzi)</h2>
+  <p>Le celle prese da vecchi pacchi possono funzionare bene in progetti a <b>bassa corrente</b> (luci, power bank, accumulo piccolo), se selezionate con pazienza. Non sono adatte a e‑bike o monopattini potenti.</p>
+  <div class="svgbox"><svg id="recSvg" viewBox="0 0 620 200"></svg></div>
+  <div class="step"><div class="num">1</div><div><h4>Smonta con cura</h4><p>Apri il pacco senza forare le celle (niente cacciaviti infilati tra le celle). Stacca le lamelle <b>torcendole</b> con una pinza, non tagliando contro la cella. Lavora con le celle separate da cartoncino: il pacco è ancora carico.</p></div></div>
+  <div class="step"><div class="num">2</div><div><h4>Prima selezione</h4><ul><li>Scarta subito: ammaccate, gonfie, arrugginite, che perdono liquido o odorano.</li><li>Misura la tensione: <b>sotto 2,0 V scarta</b> (rischio di danni interni); tra 2,0 e 2,8 V, ricarica solo con caricatore che fa la precarica lenta, e osserva bene.</li></ul></div></div>
+  <div class="step"><div class="num">3</div><div><h4>Carica completa singola</h4><p>Ogni cella su caricatore singolo intelligente (es. Liitokala, Opus, XTAR, Nitecore). Se una cella si scalda durante la carica, scartala.</p></div></div>
+  <div class="step"><div class="num">4</div><div><h4>Test di autoscarica (7–14 giorni)</h4><p>Misura e annota la tensione a cella piena, aspetta almeno una settimana, rimisura. Calo oltre 0,05 V: scarta. Questo è il test più importante: elimina le celle che un giorno potrebbero scaldarsi nel pacco.</p></div></div>
+  <div class="step"><div class="num">5</div><div><h4>Capacità e resistenza interna</h4><p>Misura la capacità reale con il caricatore‑analizzatore e la resistenza interna con un tester IR. Scarta le celle sotto il 70–75% della capacità nominale o con IR molto più alta delle altre.</p></div></div>
+  <div class="step"><div class="num">6</div><div><h4>Ordina e abbina</h4><p>Raggruppa le celle in modo che ogni gruppo in parallelo abbia la stessa capacità totale (vedi capitolo 12). Riguaina quelle con la guaina rovinata.</p></div></div>
+</section>
+
+<!-- 7 -->
+<section class="chap" id="c7">
+  <div class="kick">Capitolo 07</div>
+  <h2>Progettista del pacco</h2>
+  <p>Scegli una tensione comune o imposta tu serie (S) e parallelo (P), poi la cella. Tutti i capitoli seguenti (schema e lista materiali) si aggiornano con questi dati.</p>
+  <div class="btns" id="presets"></div>
+  <div class="row">
+    <div><label class="f">Celle in serie (S)</label><input type="number" id="pS" value="13" min="1" max="24"></div>
+    <div><label class="f">Celle in parallelo (P)</label><input type="number" id="pP" value="4" min="1" max="14"></div>
+    <div style="grid-column:span 2;min-width:0"><label class="f">Cella</label><select id="pCell"></select></div>
+  </div>
+  <div class="row">
+    <div><label class="f">Corrente che userai (A, continua)</label><input type="number" id="pUse" value="20" min="0.1" step="0.5"></div>
+    <div><label class="f">Obiettivo energia (Wh, facoltativo)</label><input type="number" id="pWh" placeholder="es. 700" min="0"></div>
+  </div>
+  <div id="designWarn"></div>
+  <div class="grid" id="designOut"></div>
+</section>
+
+<!-- 8 -->
+<section class="chap" id="c8">
+  <div class="kick">Capitolo 08</div>
+  <h2>Schema di montaggio automatico</h2>
+  <p>Disposizione in un unico strato: ogni <b>colonna</b> è un gruppo di celle in parallelo, le colonne si alternano di verso. Le lamelle grigie collegano i gruppi in serie a "serpentina".</p>
+  <div class="btns"><button class="on" data-side="top">Lato superiore</button><button data-side="bot">Lato inferiore</button><button id="relay">↻ Riproduci animazione</button></div>
+  <div class="svgbox"><svg id="layout" viewBox="0 0 860 360"></svg></div>
+  <p class="cap" id="layoutTxt"></p>
+  <div class="note"><b>Pacchi molto lunghi</b>Oltre 14–16 colonne il pacco diventa scomodo: si divide in due strati o si piega a "U". La logica non cambia: ogni gruppo resta un parallelo e i gruppi si collegano in serie nell'ordine 1 → 2 → 3… Disegna sempre lo schema su carta prima di saldare.</div>
+</section>
+
+<!-- 9 -->
+<section class="chap" id="c9">
+  <div class="kick">Capitolo 09</div>
+  <h2>Configurazioni più comuni</h2>
+  <div class="tablewrap"><table>
+    <tr><th>Uso</th><th>Configurazione</th><th>Nominale</th><th>Carica piena</th><th>Caricatore</th></tr>
+    <tr><td>Torce, power bank, 1 cella</td><td>1S</td><td class="v">3,6 V</td><td class="v">4,2 V</td><td>USB per Li‑ion</td></tr>
+    <tr><td>Altoparlanti, router, LED 12 V (Li‑ion)</td><td>3S</td><td class="v">10,8 V</td><td class="v">12,6 V</td><td>12,6 V</td></tr>
+    <tr><td>Sostituto batteria piombo 12 V</td><td>4S <b>LiFePO4</b></td><td class="v">12,8 V</td><td class="v">14,4–14,6 V</td><td>14,6 V LFP</td></tr>
+    <tr><td>Attrezzi 18 V, 4S Li‑ion</td><td>4S / 5S</td><td class="v">14,4 / 18 V</td><td class="v">16,8 / 21 V</td><td>16,8 / 21 V</td></tr>
+    <tr><td>Monopattini e accumulo 24 V</td><td>7S</td><td class="v">25,2 V</td><td class="v">29,4 V</td><td>29,4 V</td></tr>
+    <tr><td>E‑bike e monopattini 36 V</td><td>10S</td><td class="v">36 V</td><td class="v">42 V</td><td>42 V</td></tr>
+    <tr><td>E‑bike 48 V</td><td>13S</td><td class="v">46,8 V</td><td class="v">54,6 V</td><td>54,6 V</td></tr>
+    <tr><td>E‑bike 52 V</td><td>14S</td><td class="v">50,4 V</td><td class="v">58,8 V</td><td>58,8 V</td></tr>
+    <tr><td>Monopattini/e‑bike potenti 60 V</td><td>16S</td><td class="v">57,6 V</td><td class="v">67,2 V</td><td>67,2 V</td></tr>
+    <tr><td>Scooter e moto leggere 72 V</td><td>20S</td><td class="v">72 V</td><td class="v">84 V</td><td>84 V</td></tr>
+    <tr><td>Accumulo solare 48 V</td><td>16S <b>LiFePO4</b></td><td class="v">51,2 V</td><td class="v">57,6–58,4 V</td><td>58,4 V LFP / regolatore</td></tr>
+  </table></div>
+  <div class="btns" id="cfgBtns"></div>
+</section>
+
+<!-- 10 -->
+<section class="chap" id="c10">
+  <div class="kick">Capitolo 10</div>
+  <h2>Lista materiali del tuo pacco</h2>
+  <p>Calcolata dal progettista (capitolo 07). Spunta quello che hai già. Prezzi indicativi in euro.</p>
+  <div id="shopHead" style="font:600 .9rem JetBrains Mono;color:var(--accent)"></div>
+  <h3>Materiali</h3><div class="shop"><ul id="shopMat"></ul></div>
+  <h3>Attrezzi (si comprano una volta)</h3><div class="shop"><ul id="shopTools"></ul></div>
+  <div class="total"><span>Spuntato / totale</span><span id="tot">–</span></div>
+</section>
+
+<!-- 11 -->
+<section class="chap" id="c11">
+  <div class="kick">Capitolo 11</div>
+  <h2>Il montaggio animato</h2>
+  <p>Un piccolo pacco 4S2P costruito passo‑passo. La sequenza è la stessa per qualsiasi configurazione.</p>
+  <div class="btns"><button id="bPrev">◀</button><button id="bNext" class="on">Avanti ▶</button><button id="bPlay">▶ Riproduci tutto</button></div>
+  <div class="svgbox"><svg id="buildSvg" viewBox="0 0 620 320"></svg></div>
+  <div class="steptxt" id="buildTxt"></div>
+</section>
+
+<!-- 12 -->
+<section class="chap" id="c12">
+  <div class="kick">Capitolo 12</div>
+  <h2>Procedimento scritto completo</h2>
+  <div id="stepsBox"></div>
+  <h3>Abbinare le celle nei gruppi (bilanciamento delle capacità)</h3>
+  <p>Con celle generiche o di recupero, le capacità sono diverse. Metodo semplice: ordina le celle dalla più grande alla più piccola e distribuiscile "a serpentina" (1→S, poi S→1, poi 1→S…). Così ogni gruppo riceve celle forti e deboli e le capacità totali risultano vicine. Il pacco vale quanto il <b>gruppo più debole</b>.</p>
+  <div class="svgbox"><svg id="snakeSvg" viewBox="0 0 620 170"></svg></div>
+</section>
+
+<!-- 13 -->
+<section class="chap" id="c13">
+  <div class="kick">Capitolo 13</div>
+  <h2>Cosa fare e cosa non fare</h2>
+  <div class="two">
+    <div class="col do"><h4 style="color:var(--ok)">✅ Da fare</h4><ul>
+      <li>Usare celle tutte uguali: stesso modello, stesso lotto, stessa età.</li>
+      <li>Pareggiare la tensione di tutte le celle prima di metterle in parallelo.</li>
+      <li>Rondella isolante su ogni polo positivo.</li>
+      <li>Saldatura a punti per tutte le connessioni alle celle.</li>
+      <li>Dimensionare con la corrente <b>continua</b> della cella, non quella di picco.</li>
+      <li>BMS adatto a chimica, numero di serie e corrente.</li>
+      <li>Fusibile sul positivo principale.</li>
+      <li>Verificare la tensione di ogni gruppo prima di collegare il BMS.</li>
+      <li>Prima carica sorvegliata, su superficie non infiammabile.</li>
+      <li>Etichettare il pacco: chimica, configurazione, tensioni, data.</li>
+      <li>Tenere sabbia o estintore vicino al banco.</li>
+    </ul></div>
+    <div class="col dont"><h4 style="color:var(--danger)">❌ Da non fare</h4><ul>
+      <li>Saldare a stagno sul corpo o sul polo della cella.</li>
+      <li>Mescolare celle nuove e usate, marche diverse o chimiche diverse.</li>
+      <li>Comprare celle da "9900 mAh" o a prezzi troppo bassi.</li>
+      <li>Usare celle ammaccate, gonfie, con guaina rotta (senza riguainarle).</li>
+      <li>Collegare in parallelo celle a tensioni molto diverse.</li>
+      <li>Usare un pacco senza BMS o con BMS della chimica sbagliata.</li>
+      <li>Usare un caricatore di tensione diversa da quella del pacco.</li>
+      <li>Usare lamelle di acciaio nichelato per correnti alte.</li>
+      <li>Lavorare con anelli, braccialetti, attrezzi non isolati.</li>
+      <li>Caricare sotto 0 °C o lasciare il pacco al sole in auto.</li>
+      <li>Caricare di notte incustodito nei primi mesi.</li>
+      <li>Buttare celle e pacchi nella spazzatura normale.</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="chap" id="c14">
+  <div class="kick">Capitolo 14</div>
+  <h2>Ricarica, conservazione, smaltimento</h2>
+  <div class="svgbox"><svg id="socSvg" viewBox="0 0 620 170"></svg></div>
+  <ul>
+    <li><b>Ricarica:</b> caricatore con tensione esatta del pacco (S × 4,20 V per Li‑ion, S × 3,60–3,65 V per LFP). Corrente comoda: 0,2–0,5 C (es. 2–5 A per un pacco da 10–20 Ah).</li>
+    <li><b>Per durare di più:</b> uso quotidiano tra il 20% e l'80–90%, carica al 100% solo prima dei viaggi lunghi.</li>
+    <li><b>Conservazione lunga:</b> al 40–60% (Li‑ion ~3,7–3,8 V/cella), al fresco (10–20 °C) e all'asciutto. Controlla ogni 1–2 mesi.</li>
+    <li><b>Temperature:</b> carica tra 0 °C e 45 °C, uso tra −20 °C e 60 °C. Non caricare un pacco bollente appena usato.</li>
+    <li><b>Trasporto e spedizione:</b> le batterie al litio sono merci pericolose (UN3480 / UN3481). Per spedirle servono imballi e documenti specifici; mai nel bagaglio da stiva in aereo.</li>
+    <li><b>Smaltimento:</b> in <b>Svizzera</b> riconsegna gratuita in qualsiasi negozio che vende pile o al centro di raccolta comunale. In <b>Italia</b> isola ecologica comunale o contenitori per pile nei negozi. Copri i poli con nastro adesivo prima di consegnarle.</li>
+  </ul>
+  <div class="warn"><b>⚠ Se un pacco scalda, fuma o si gonfia</b>Scollegalo solo se puoi farlo in sicurezza, portalo all'aperto lontano da cose infiammabili (se è possibile senza rischi), non respirare i fumi. Su un pacco grande in fiamme chiama i pompieri: 118 in Svizzera, 115 in Italia.</div>
+</section>
+
+</main>
+<div class="footer">Manuale · Volume 5 della serie batterie fai‑da‑te<br>I dati delle celle sono valori dichiarati dai produttori o tipici; prezzi indicativi. Lavorare con batterie al litio comporta rischi reali di incendio e ustione.</div>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.04});
+document.querySelectorAll('.chap').forEach(s=>io.observe(s));
+addEventListener('scroll',()=>{const h=document.documentElement;document.getElementById('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'});
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;if(p)p.appendChild(e);return e}
+const $=id=>document.getElementById(id);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const fmt=(n,d=0)=>n.toLocaleString('it-IT',{minimumFractionDigits:d,maximumFractionDigits:d});
+
+// ===== disegno cella orizzontale
+function cellH(p,x,y,L,D,wrap,label,opt={}){
+  const g=el('g',{transform:`translate(${x} ${y})`},p);
+  el('rect',{x:0,y:0,width:L,height:D,rx:D*.12,fill:wrap},g);
+  el('rect',{x:0,y:D*.12,width:L,height:D*.18,fill:'#fff',opacity:.12},g);
+  el('rect',{x:L,y:D*.12,width:D*.1,height:D*.76,rx:2,fill:'#cbd5e1'},g);
+  el('rect',{x:L+D*.1,y:D*.32,width:D*.12,height:D*.36,rx:2,fill:'#e5e7eb'},g);
+  el('rect',{x:-D*.06,y:D*.06,width:D*.08,height:D*.88,rx:2,fill:'#94a3b8'},g);
+  if(label)el('text',{x:L/2,y:D*.62,'text-anchor':'middle','font-size':Math.max(7,D*.34),'font-weight':800,fill:opt.ink||'#0d1117','font-family':'Inter'},g,label);
+  if(opt.fake){el('rect',{x:0,y:0,width:L,height:D,rx:D*.12,fill:'url(#fakeStripes)'},g)}
+  return g;
+}
+
+// ===== hero
+(function(){const s=$('heroSvg');
+  const defs=el('defs',{},s);const pt=el('pattern',{id:'fakeStripes',width:8,height:8,patternUnits:'userSpaceOnUse',patternTransform:'rotate(45)'},defs);el('rect',{width:4,height:8,fill:'#f87171',opacity:.35},pt);
+  const cols=['#16a34a','#ec4899','#2563eb','#a16207','#0891b2','#7c3aed','#dc2626','#15803d'];
+  for(let i=0;i<8;i++){const big=i%2===1,w=big?42:36,h=big?140:130,x=26+i*48+(big?-3:0),y=160-h;
+    const g=el('g',{class:'hc',style:`animation-delay:${i*.1}s`},s);
+    el('rect',{x,y,width:w,height:h,rx:6,fill:cols[i]},g);el('rect',{x:x+w*.15,y,width:w*.18,height:h,fill:'#fff',opacity:.15},g);
+    el('rect',{x:x+w*.15,y:y-5,width:w*.7,height:6,rx:2,fill:'#cbd5e1'},g);el('rect',{x:x+w*.32,y:y-9,width:w*.36,height:5,rx:2,fill:'#e5e7eb'},g);
+    el('text',{x:x+w/2,y:y+h/2,'text-anchor':'middle',fill:'#fff','font-size':10,'font-weight':800,transform:`rotate(-90 ${x+w/2} ${y+h/2})`},g,big?'21700':'18650');}
+})();
+
+// ===== anatomia
+let cut=true;
+function anatomy(){const s=$('anatomy');s.innerHTML='';
+  const x=90,y=70,L=400,D=110;
+  if(!cut){cellH(s,x,y,L,D,'#16a34a','18650 · 3,6 V · 3000 mAh',{ink:'#052e16'})}
+  else{
+    el('rect',{x,y,width:L,height:D,rx:12,fill:'#475569'},s);
+    el('rect',{x:x+6,y:y+6,width:L-12,height:D-12,rx:8,fill:'#0f172a'},s);
+    for(let i=0;i<9;i++){const c=['#b45309','#e5e7eb','#64748b','#e5e7eb'][i%4];el('rect',{x:x+30,y:y+12+i*10,width:L-60,height:5,fill:c,opacity:.9,class:'pop',style:`animation-delay:${i*.06}s`},s)}
+    el('rect',{x:x+L-26,y:y+8,width:20,height:D-16,fill:'#1e293b'},s);
+    el('rect',{x:x+L,y:y+18,width:16,height:D-36,rx:3,fill:'#cbd5e1'},s);el('rect',{x:x+L+16,y:y+38,width:14,height:D-76,rx:3,fill:'#e5e7eb'},s);
+    el('rect',{x:x+L-6,y:y+14,width:8,height:D-28,fill:'#f59e0b'},s);
+    el('path',{d:`M${x+L-20} ${y+46} l10 -6 l0 12 z`,fill:'#22d3ee'},s);
+    el('rect',{x:x+L-2,y:y+8,width:6,height:10,fill:'#a3e635'},s);el('rect',{x:x+L-2,y:y+D-18,width:6,height:10,fill:'#a3e635'},s);
+    el('rect',{x:x+8,y:y+50,width:L-30,height:6,fill:'#9ca3af',opacity:.7},s);
+  }
+  const lab=(px,py,tx,ty,t,c='#a3e635')=>{el('line',{x1:px,y1:py,x2:tx,y2:ty,stroke:c,'stroke-width':1.3},s);el('circle',{cx:px,cy:py,r:3.5,fill:c},s);el('text',{x:tx,y:ty+(ty<py?-4:12),'text-anchor':'middle',fill:'#e8edf3','font-size':11},s,t)};
+  if(cut){lab(x+L+22,y+50,560,30,'Cappellotto +');lab(x+L-16,y+46,470,22,'CID / valvola','#22d3ee');lab(x+L-2,y+14,400,40,'Anello isolante');lab(x+200,y+40,220,30,'Jelly roll (anodo · separatore · catodo)','#fbbf24');lab(x+100,y+53,250,225,'Perno centrale');lab(x+L-2,y+D-6,520,225,'Contenitore acciaio = polo −','#60a5fa');lab(x-2,y+D/2,40,210,'Fondello −','#60a5fa')}
+  else{lab(x+L+28,y+D/2,560,30,'Polo +');lab(x+200,y+10,220,30,'Guaina in PVC con modello e lotto');lab(x-6,y+D/2,40,210,'Fondello −','#60a5fa')}
+  $('cutBtn').classList.toggle('on',cut);$('cutBtn2').classList.toggle('on',!cut);
+}
+$('cutBtn').onclick=()=>{cut=true;anatomy()};$('cutBtn2').onclick=()=>{cut=false;anatomy()};anatomy();
+
+// ===== dimensioni
+(function(){const s=$('sizeCmp');const k=3.2;
+  // vista laterale in scala
+  cellH(s,40,40,65*k,18*k,'#ec4899','18650');cellH(s,40,130,70*k,21*k,'#2563eb','21700');
+  el('text',{x:40,y:30,fill:'#9aa7b6','font-size':11},s,'65 mm');el('text',{x:40,y:125,fill:'#9aa7b6','font-size':11},s,'70 mm');
+  // sezioni
+  const c1=el('circle',{cx:430,cy:100,r:9*k,fill:'#ec4899',opacity:.85},s),c2=el('circle',{cx:430+0,cy:100,r:10.5*k,fill:'none',stroke:'#60a5fa','stroke-width':3,'stroke-dasharray':'6 4'},s);
+  el('text',{x:430,y:104,'text-anchor':'middle',fill:'#0d1117','font-size':12,'font-weight':800},s,'Ø18');
+  el('text',{x:430,y:100+10.5*k+18,'text-anchor':'middle',fill:'#60a5fa','font-size':12},s,'Ø21 (tratteggio)');
+  // barre capacità
+  [[3000,'#ec4899','18650 ≈ 3000 mAh'],[5000,'#2563eb','21700 ≈ 5000 mAh']].forEach(([v,c,t],i)=>{const r=el('rect',{x:510,y:60+i*50,width:0,height:20,rx:4,fill:c},s);el('text',{x:510,y:52+i*50,fill:'#e8edf3','font-size':10},s,t);setTimeout(()=>{r.style.transition='width 1.2s';r.setAttribute('width',v/50)},400)});
+  el('text',{x:310,y:222,'text-anchor':'middle',fill:'#9aa7b6','font-size':11},s,'disegno in scala tra le due celle');
+})();
+
+// ===== chimiche (curve di scarica)
+(function(){const s=$('chemSvg');const X=v=>60+v*5,Y=v=>200-(v-2.4)*90;
+  [2.5,3,3.5,4].forEach(v=>{el('line',{x1:60,x2:560,y1:Y(v),y2:Y(v),stroke:'#2b3644'},s);el('text',{x:52,y:Y(v)+4,'text-anchor':'end',fill:'#9aa7b6','font-size':10,'font-family':'JetBrains Mono'},s,v.toFixed(1)+' V')});
+  el('text',{x:560,y:222,'text-anchor':'end',fill:'#9aa7b6','font-size':11},s,'capacità usata → 100%');
+  const nmc=[[0,4.2],[5,4.08],[20,3.92],[40,3.78],[60,3.66],[80,3.52],[92,3.35],[98,3.1],[100,2.9]];
+  const lfp=[[0,3.55],[5,3.36],[20,3.3],[40,3.28],[60,3.26],[80,3.22],[92,3.15],[98,2.95],[100,2.6]];
+  [[nmc,'#a3e635','Li‑ion NMC/NCA'],[lfp,'#c084fc','LiFePO4']].forEach(([pts,c,n],i)=>{
+    const d=pts.map((p,j)=>(j?'L':'M')+X(p[0])+' '+Y(p[1])).join(' ');
+    const path=el('path',{d,fill:'none',stroke:c,'stroke-width':3},s);const len=path.getTotalLength?path.getTotalLength():800;
+    path.style.strokeDasharray=len;path.style.strokeDashoffset=len;setTimeout(()=>{path.style.transition='stroke-dashoffset 2s';path.style.strokeDashoffset=0},300+i*500);
+    el('text',{x:X(30),y:Y(pts[2][1])-10-i*0,fill:c,'font-size':12,'font-weight':700},s,n);
+  });
+})();
+
+// ===== database celle
+// [modello, formato, tipo, mAh, A cont, peso g, chimica, prezzo €, colore, note]
+const CELLS=[
+ ['Samsung 25R','18650','b',2500,20,45,'NMC',3.5,'#16a34a','Alta corrente, molto robusta'],
+ ['Samsung 30Q','18650','b',3000,15,46,'NMC',4,'#ec4899','Equilibrio capacità/corrente; molto falsificata'],
+ ['Samsung 35E','18650','b',3500,8,50,'NMC',4,'#7c3aed','Alta capacità, bassa corrente'],
+ ['LG HG2','18650','b',3000,20,47,'NMC',4.5,'#a16207','Alta corrente'],
+ ['LG MJ1','18650','b',3500,10,47,'NMC',4.5,'#dc2626','Alta capacità'],
+ ['Murata (Sony) VTC6','18650','b',3000,15,46,'NMC',5.5,'#16a34a','Ottima sotto carico'],
+ ['Molicel P28A','18650','b',2800,35,46,'NMC',5,'#0891b2','Altissima corrente'],
+ ['Molicel P30B','18650','b',3000,36,46,'NMC',5.5,'#0e7490','Altissima corrente, buona capacità'],
+ ['Panasonic NCR18650B','18650','b',3400,6,48,'NCA',5,'#0d9488','Classica per bassa corrente'],
+ ['Panasonic NCR18650GA','18650','b',3450,10,48,'NCA',5,'#a21caf','Alta capacità, corrente media'],
+ ['Cinese di marca (EVE, Lishen, BAK, DMEGC, Ampace)','18650','g',2600,7,46,'NMC',2.2,'#64748b','Spesso buone: verifica il datasheet del modello esatto'],
+ ['Generica senza marca "Grade B"','18650','g',2000,3,44,'NMC',1.5,'#475569','Valori non garantiti: testare tutte'],
+ ['Recupero portatile/power bank','18650','r',2000,3,45,'NMC',0,'#334155','Variabili: selezione e test obbligatori (cap. 06)'],
+ ['LiFePO4 18650','18650','l',1500,3,40,'LFP',2,'#7e22ce','3,2 V nominali; molto sicura, poca energia'],
+ ['"UltraFire 9900 mAh" e simili','18650','f',800,1,28,'?',0.8,'#f97316','FALSA: capacità reale 500–1500 mAh. Non usare'],
+ ['Samsung 40T','21700','b',4000,35,67,'NMC',6,'#334155','Alta corrente'],
+ ['Samsung 50E','21700','b',5000,10,69,'NMC',4.5,'#ca8a04','Alta capacità, corrente media'],
+ ['Samsung 50S','21700','b',5000,25,70,'NMC',6,'#0f766e','Capacità e corrente buone'],
+ ['LG M50LT','21700','b',5000,7.3,68,'NMC',4.5,'#b91c1c','Alta capacità, bassa corrente'],
+ ['Molicel P42A','21700','b',4200,45,70,'NMC',6,'#15803d','Altissima corrente'],
+ ['Molicel P45B','21700','b',4500,45,70,'NMC',7,'#166534','Alta corrente e capacità'],
+ ['Molicel P50B','21700','b',5000,60,70,'NMC',8.5,'#14532d','Top di gamma: capacità e corrente elevatissime'],
+ ['Cinese di marca (EVE, Lishen, BAK, Ampace)','21700','g',4500,12,68,'NMC',3,'#64748b','Spesso ottimo rapporto qualità/prezzo: verifica il datasheet'],
+ ['Generica senza marca "Grade B"','21700','g',3800,5,66,'NMC',2,'#475569','Valori non garantiti'],
+ ['"8800 / 12000 mAh" e simili','21700','f',2000,2,40,'?',1.2,'#f97316','FALSA. Non usare'],
+];
+const TT={b:['Di marca','b'],g:['Generica','g'],r:['Recupero','r'],f:['FALSA','f'],l:['LiFePO4','l']};
+function miniCell(c){const s=document.createElementNS(NS,'svg');s.setAttribute('viewBox','0 0 120 34');s.setAttribute('class','cellpic');
+  const big=c[1]==='21700';cellH(s,6,big?3:5,big?100:94,big?28:24,c[8],c[1],{ink:'#fff',fake:c[2]==='f'});return s.outerHTML}
+function cellTable(){
+  const q=$('cq').value.toLowerCase(),f=$('cf').value,t=$('ct').value,so=$('cs').value;
+  let L=CELLS.filter(c=>(!f||c[1]===f)&&(!t||c[2]===t)&&(!q||(c[0]+' '+c[9]+' '+TT[c[2]][0]).toLowerCase().includes(q)));
+  const whe=c=>c[7]?c[3]*(c[6]==='LFP'?3.2:3.6)/1000/c[7]:0;
+  L.sort((a,b)=>so==='a'?b[4]-a[4]:so==='eur'?(a[7]||99)-(b[7]||99):so==='whe'?whe(b)-whe(a):b[3]-a[3]);
+  $('cellTable').innerHTML='<tr><th></th><th>Cella</th><th>Tipo</th><th>mAh</th><th>A cont.</th><th>Peso</th><th>Wh</th><th>€ / cella</th><th>Note</th></tr>'+L.map(c=>{const v=c[6]==='LFP'?3.2:3.6;return `<tr><td>${miniCell(c)}</td><td><b>${c[0]}</b><div style="font-size:.75rem;color:var(--muted)">${c[1]} · ${c[6]}</div></td><td><span class="tag ${TT[c[2]][1]}">${TT[c[2]][0]}</span></td><td class="v">${c[2]==='f'?'<span style="color:var(--danger)">~'+c[3]+'</span>':c[3]}</td><td class="v">${c[4]} A</td><td class="v">${c[5]} g</td><td class="v">${fmt(c[3]*v/1000,1)}</td><td class="v">${c[7]?'~'+fmt(c[7],1):'—'}</td><td style="font-size:.8rem;color:var(--muted)">${c[9]}</td></tr>`}).join('');
+}
+['cq','cf','ct','cs'].forEach(id=>{$(id).oninput=cellTable;$(id).onchange=cellTable});cellTable();
+
+// ===== bilancia
+async function weigh(){const s=$('scaleSvg');s.innerHTML='';
+  const draw=(cx,label,g,ok)=>{const grp=el('g',{},s);
+    el('rect',{x:cx-90,y:190,width:180,height:30,rx:6,fill:'#334155'},grp);el('rect',{x:cx-60,y:196,width:120,height:18,rx:3,fill:'#052e16'},grp);
+    const disp=el('text',{x:cx,y:210,'text-anchor':'middle',fill:'#a3e635','font-size':14,'font-family':'JetBrains Mono','font-weight':700},grp,'0.0 g');
+    el('rect',{x:cx-70,y:178,width:140,height:12,rx:3,fill:'#64748b'},grp);
+    const c=cellH(grp,cx-55,40,110,28,ok?'#ec4899':'#f97316',ok?'3000':'9900',{ink:'#fff',fake:!ok});
+    el('text',{x:cx,y:28,'text-anchor':'middle',fill:ok?'#36d399':'#f87171','font-size':13,'font-weight':700},grp,label);
+    return {c,disp,g,ok,cx};};
+  const A=draw(160,'18650 vera',46.5,true),B=draw(460,'18650 "9900 mAh"',27.8,false);
+  await sleep(300);
+  for(const o of [A,B]){o.c.style.transition='transform .8s cubic-bezier(.3,1.3,.6,1)';o.c.setAttribute('transform',`translate(${o.cx-55} 148)`)}
+  await sleep(800);
+  for(let i=0;i<=20;i++){A.disp.textContent=(A.g*i/20).toFixed(1)+' g';B.disp.textContent=(B.g*i/20).toFixed(1)+' g';await sleep(40)}
+  el('text',{x:160,y:242,'text-anchor':'middle',fill:'#36d399','font-size':12},s,'✓ peso giusto (44–50 g)');
+  el('text',{x:460,y:242,'text-anchor':'middle',fill:'#f87171','font-size':12},s,'✗ troppo leggera: falsa');
+}
+$('scaleBtn').onclick=weigh;
+new IntersectionObserver((es,o)=>{if(es[0].isIntersecting){weigh();o.disconnect()}},{threshold:.3}).observe($('scaleSvg'));
+
+// ===== recupero (funnel)
+(function(){const s=$('recSvg');const st=[['100 celle recuperate',100,'#64748b'],['Integre e > 2 V',80,'#94a3b8'],['Autoscarica ok',62,'#fbbf24'],['Capacità ≥ 75%',45,'#a3e635'],['Usabili',40,'#36d399']];
+  st.forEach(([t,v,c],i)=>{const w=v*4.6;const r=el('rect',{x:310-w/2,y:14+i*36,width:0,height:28,rx:6,fill:c},s);
+    el('text',{x:310,y:33+i*36,'text-anchor':'middle',fill:'#0d1117','font-size':12,'font-weight':700},s,t+' · '+v);
+    setTimeout(()=>{r.style.transition='all .8s';r.setAttribute('width',w)},200+i*250)});
+  el('text',{x:610,y:196,'text-anchor':'end',fill:'#9aa7b6','font-size':10},s,'esempio tipico, i numeri variano molto');
+})();
+
+// ===== progettista
+const PRE=[['12 V (3S)',3,'NMC'],['12 V LFP (4S)',4,'LFP'],['24 V (7S)',7,'NMC'],['36 V (10S)',10,'NMC'],['48 V (13S)',13,'NMC'],['52 V (14S)',14,'NMC'],['60 V (16S)',16,'NMC'],['72 V (20S)',20,'NMC']];
+const pc=$('pCell');CELLS.forEach((c,i)=>{if(c[2]!=='f'){const o=document.createElement('option');o.value=i;o.textContent=`${c[0]} · ${c[1]} · ${c[3]} mAh · ${c[4]} A`;pc.appendChild(o)}});
+pc.value=CELLS.findIndex(c=>c[0]==='Samsung 50S');
+PRE.forEach(([n,s,ch])=>{const b=document.createElement('button');b.textContent=n;b.onclick=()=>{$('pS').value=s;if(ch==='LFP')pc.value=CELLS.findIndex(c=>c[6]==='LFP');else if(CELLS[pc.value][6]==='LFP')pc.value=CELLS.findIndex(c=>c[0]==='Samsung 50S');design()};$('presets').appendChild(b)});
+let D={};
+function design(){
+  let S=Math.min(24,Math.max(1,+$('pS').value||1)),P=Math.min(14,Math.max(1,+$('pP').value||1));
+  const c=CELLS[+pc.value],lfp=c[6]==='LFP',vn=lfp?3.2:3.6,vmax=lfp?3.65:4.2,vmin=lfp?2.5:3.0;
+  const wantWh=+$('pWh').value;
+  const ah=P*c[3]/1000,wh=S*vn*ah,imax=P*c[4],irec=imax*0.7,use=+$('pUse').value||0,n=S*P;
+  const kg=n*c[5]/1000*1.18,d=c[1]==='21700'?21.6:18.6,h=c[1]==='21700'?70:65;
+  D={S,P,c,lfp,vn,vmax,vmin,ah,wh,imax,irec,use,n,kg,d,h};
+  let w='';
+  if(use>irec)w+=`<div class="warn"><b>⚠ Corrente troppo alta per queste celle</b>Chiedi ${use} A ma il pacco regge bene circa ${fmt(irec)} A continui (${P} × ${c[4]} A × 70%). Aumenta il parallelo a <b>${Math.ceil(use/(c[4]*0.7))}P</b> o scegli celle ad alta corrente.</div>`;
+  if(c[2]==='r'||c[2]==='g')w+=`<div class="note"><b>Celle ${c[2]==='r'?'di recupero':'generiche'}</b>I valori sono tipici, non garantiti: misura capacità e corrente reali e lascia un margine maggiore.</div>`;
+  if(wantWh>0){const needP=Math.ceil(wantWh/(S*vn*c[3]/1000));w+=`<div class="tip"><b>Per arrivare a ${fmt(wantWh)} Wh</b>Con ${S}S e questa cella servono almeno <b>${needP}P</b> (${S*needP} celle, ${fmt(S*vn*needP*c[3]/1000)} Wh).</div>`}
+  $('designWarn').innerHTML=w;
+  const it=[[S+'S'+P+'P','Configurazione'],[n,'Celle'],[fmt(S*vn,1)+' V','Nominale'],[fmt(S*vmax,1)+' V','Carica piena'],[fmt(S*vmin,1)+' V','Vuota (taglio BMS)'],[fmt(ah,1)+' Ah','Capacità'],[fmt(wh)+' Wh','Energia'],[fmt(irec)+' A','Continua consigliata'],[fmt(imax)+' A','Massima celle'],['~'+fmt(kg,1)+' kg','Peso stimato'],[Math.round(S*d+12)+'×'+Math.round(P*d+12)+'×'+(h+14)+' mm','Ingombro 1 strato'],[fmt(S*vmax,1)+' V','Caricatore']];
+  $('designOut').innerHTML=it.map(i=>`<div class="stat"><div class="v">${i[0]}</div><div class="l">${i[1]}</div></div>`).join('');
+  layout(true);buildShop();
+}
+['pS','pP','pCell','pUse','pWh'].forEach(id=>{$(id).oninput=design;$(id).onchange=design});
+
+// ===== layout parametrico
+let side='top';
+function strips(S,top){const r=[];if(top){r.push([0,0]);let i=1;for(;i+1<S;i+=2)r.push([i,i+1]);if(i<S)r.push([i,i])}else{let i=0;for(;i+1<S;i+=2)r.push([i,i+1]);if(i<S)r.push([i,i])}return r}
+function layout(anim){
+  const s=$('layout');s.innerHTML='';const {S,P}=D;
+  const dx=Math.min(48,780/S),r=dx*.36,dy=Math.min(40,dx*.85),ox=40+dx/2,oy=46;
+  const H=oy+P*dy+60;s.setAttribute('viewBox',`0 0 860 ${H}`);
+  const top=side==='top';const st=strips(S,top);
+  st.forEach(([a,b])=>el('rect',{x:ox+a*dx-r-3,y:oy-r-3,width:(b-a)*dx+2*r+6,height:(P-1)*dy+2*r+6,rx:8,fill:'rgba(200,205,212,.16)',stroke:'#c8cdd4','stroke-width':1.3},s));
+  for(let c=0;c<S;c++){const negTop=c%2===0,neg=top?negTop:!negTop;
+    for(let k=0;k<P;k++){const g=el('g',{class:anim?'pop':'',style:anim?`animation-delay:${(c*P+k)*Math.min(25,900/(S*P))}ms;transform-origin:${ox+c*dx}px ${oy+k*dy}px`:''},s);
+      el('circle',{cx:ox+c*dx,cy:oy+k*dy,r,fill:'#1c2430',stroke:neg?'#3b82f6':'#ef4444','stroke-width':2.5},g);
+      el('text',{x:ox+c*dx,y:oy+k*dy+r*.4,'text-anchor':'middle',fill:neg?'#60a5fa':'#f87171','font-size':Math.max(8,r*1.1),'font-weight':800},g,neg?'−':'+')}
+    el('text',{x:ox+c*dx,y:oy+(P-1)*dy+r+16,'text-anchor':'middle',fill:'#9aa7b6','font-size':Math.min(11,dx*.32),'font-family':'JetBrains Mono'},s,'G'+(c+1));
+  }
+  st.forEach(([a,b])=>{if(a!==b)el('line',{x1:ox+a*dx,y1:oy+(P-1)*dy/2,x2:ox+b*dx,y2:oy+(P-1)*dy/2,stroke:'#fbbf24','stroke-width':3,class:'flow'},s)});
+  if(top)el('text',{x:ox,y:20,'text-anchor':'middle',fill:'#60a5fa','font-size':12,'font-weight':700},s,'P−');
+  const lastTop=(S-1)%2===1;
+  if((top&&lastTop)||(!top&&!lastTop))el('text',{x:ox+(S-1)*dx,y:20,'text-anchor':'middle',fill:'#f87171','font-size':12,'font-weight':700},s,'P+');
+  $('layoutTxt').textContent=`${S}S${P}P: ${S} gruppi da ${P} celle. ${top?'Lato superiore: G1 da sola (P−), poi coppie G2+G3, G4+G5…':'Lato inferiore: coppie G1+G2, G3+G4…'} ${S%2===0?'P+ esce dal lato superiore':'P+ esce dal lato inferiore'}. Fili di bilanciamento: ${S+1} (B0…B${S}), uno per ogni lamella di serie.`;
+}
+document.querySelectorAll('[data-side]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-side]').forEach(x=>x.classList.remove('on'));b.classList.add('on');side=b.dataset.side;layout(true)});
+$('relay').onclick=()=>layout(true);
+
+// ===== bottoni configurazioni
+[['36V 10S4P',10,4],['48V 13S4P',13,4],['52V 14S5P',14,5],['60V 16S6P',16,6],['72V 20S5P',20,5],['12V 3S3P',3,3]].forEach(([n,s,p])=>{const b=document.createElement('button');b.textContent='Prova '+n;b.onclick=()=>{$('pS').value=s;$('pP').value=p;design();$('c7').scrollIntoView()};$('cfgBtns').appendChild(b)});
+
+// ===== lista materiali
+function buildShop(){
+  const {S,P,c,n,lfp,use,irec,d}=D,st=store.get('shop5',{});
+  const spare=Math.max(2,Math.ceil(n*0.05));const cellCost=(c[7]||0)*(n+spare);
+  const I=Math.max(use,irec*0.6);
+  const strip=I<=15?['Lamella nichel puro 0,15 × 8 mm','~'+Math.ceil(I/5)+' strato/i sulle serie']:I<=30?['Lamella nichel puro 0,2 × 8 mm (o 0,15 doppia)','strati multipli sulle serie']:I<=60?['Rame nichelato 0,15–0,2 mm o sandwich rame+nichel','serve saldatrice potente']:['Barre/lamine di rame con nichel sopra (sandwich)','progetto ad alta corrente'];
+  const meters=Math.max(1,Math.ceil(((S+1)*(P*d+15)+S*d*P*0.5)/1000*1.3*(I>15?2:1)));
+  const awg=I<=15?'AWG 14':I<=30?'AWG 12':I<=50?'AWG 10':I<=80?'AWG 8':'AWG 6';
+  const conn=S*(lfp?3.2:3.6)>=36?(I<=45?'XT90‑S antiscintilla':'AS150 / QS8 antiscintilla'):(I<=25?'XT60':'XT90');
+  const bmsA=Math.ceil(Math.max(use,10)*1.25/5)*5;
+  $('shopHead').textContent=`Per ${S}S${P}P con ${c[0]} (${n} celle)`;
+  const M=[
+    [`Celle ${c[0]}`,`${n+spare} pz`,`${n} + ${spare} di scorta, tutte dello stesso lotto`,Math.round(cellCost)],
+    [`BMS ${S}S ${lfp?'LiFePO4':'Li‑ion'} ≥ ${bmsA} A`,'1','Chimica e numero di serie giusti; meglio con Bluetooth e bilanciamento attivo',S<=4?15:S<=13?40:60],
+    [`Supporti/distanziatori ${c[1]}`,`${n*2} posti`,'Griglie sopra e sotto',Math.ceil(n/40)*6+4],
+    [strip[0],`~${meters} m`,strip[1],Math.round(meters*(I>30?6:2.5))],
+    [`Rondelle isolanti adesive ${c[1]}`,`${n+spare} pz`,'Sul polo positivo',Math.ceil((n+spare)/100)*6],
+    ['Fishpaper (carta isolante) in fogli','1–2 fogli','Sopra e sotto il pacco',8],
+    ['Nastro Kapton 20 mm','1 rotolo','Bordi lamelle, isolamento',7],
+    [`Guaina termorestringente PVC`,'1 m',`Larghezza piatta ≈ ${Math.round((S*d+P*d)*1.15+30)} mm (metà perimetro + margine)`,14],
+    [`Cavo silicone ${awg} rosso + nero`,'1+1 m','Uscita principale',I>50?18:9],
+    [`Connettore ${conn}`,'1 coppia',S*(lfp?3.2:3.6)>=36?'Antiscintilla obbligatorio sopra i 36 V':'Polarizzato',S*(lfp?3.2:3.6)>=36?7:3],
+    [`Fusibile ${Math.ceil(Math.max(use,irec*0.8)*1.25/5)*5} A + portafusibile`,'1','Sul positivo principale',10],
+    [`Caricatore ${fmt(S*(lfp?3.65:4.2),1)} V ${lfp?'LiFePO4':'Li‑ion'}`,'1','Corrente 0,2–0,5 C',S<=4?20:S<=10?35:55],
+    ['Filo per bilanciamento AWG 20–22 (se non incluso nel BMS)','2 m',`${S+1} fili`,4],
+    ['Spugna EVA / angolari, colla a caldo, fascette','–','Protezione meccanica',10],
+  ];
+  const T=[
+    ['Saldatrice a punti (a condensatori o batteria dedicata)','1',I>30?'Per rame nichelato serve un modello potente':'',I>30?180:120],
+    ['Multimetro','1','',25],['Caricatore‑analizzatore celle singole','1','Pareggiare tensioni e testare capacità',35],
+    ['Tester resistenza interna (YR1035+ o simile)','1','Consigliato, indispensabile con celle di recupero',35],
+    ['Saldatore 80 W con punta a scalpello + stagno + flussante','1','Per fili e piazzole, mai sulle celle',45],
+    ['Pistola ad aria calda','1','Guaina',25],['Bilancia da cucina 0,1 g','1','Riconoscere le celle false',12],
+    ['Pinzette ceramica, forbici per lamiera, attrezzi isolati','set','',20],
+    ['Occhiali, guanti, secchio di sabbia o estintore','set','Non opzionale',40],
+  ];
+  const render=(id,arr,pre)=>{$(id).innerHTML=arr.map((it,i)=>{const k=pre+i,on=st[k];return `<li class="${on?'done':''}"><input type="checkbox" data-k="${k}" ${on?'checked':''}><div><div class="t">${it[0]} <span class="qty">${it[1]}</span></div>${it[2]?`<div class="d">${it[2]}</div>`:''}</div><span class="price">${it[3]?'~'+it[3]+' €':'—'}</span></li>`}).join('')};
+  render('shopMat',M,'m');render('shopTools',T,'t');
+  const all=[...M.map((x,i)=>['m'+i,x[3]]),...T.map((x,i)=>['t'+i,x[3]])];
+  $('tot').textContent=`~${all.filter(x=>st[x[0]]).reduce((a,b)=>a+b[1],0)} € / ~${all.reduce((a,b)=>a+b[1],0)} €`;
+  document.querySelectorAll('.shop input').forEach(cb=>cb.onchange=()=>{st[cb.dataset.k]=cb.checked;store.set('shop5',st);buildShop()});
+}
+
+// ===== montaggio animato 4S2P
+const BST=[
+ ['Celle verificate','Tutte le celle controllate (aspetto, peso, tensione, IR) e portate alla <b>stessa tensione</b>, es. 3,60 V.'],
+ ['Rondelle isolanti','Una rondella di fishpaper su ogni <b>polo positivo</b>: protegge l\'anello isolante dal contatto con la lamella.'],
+ ['Nel supporto, versi alternati','Gruppo 1 con il <b>−</b> in alto, gruppo 2 con il <b>+</b> in alto, e così via. Controlla con il multimetro ogni colonna.'],
+ ['Lamelle lato superiore','G1 da sola (diventa P−), G2+G3 insieme, G4 da sola (diventa P+). Le lamelle uniscono il parallelo e fanno la serie.'],
+ ['Saldatura a punti','Due impulsi per cella su ogni lamella. Mai stagno sulle celle (Volume 3).'],
+ ['Lamelle lato inferiore','Si gira il pacco: G1+G2 e G3+G4. Ora la serpentina è completa: la corrente scorre G1→G2→G3→G4.'],
+ ['Verifica tensioni','Puntale nero su P−: devi leggere circa 3,6 · 7,2 · 10,8 · 14,4 V sulle lamelle successive.'],
+ ['Fili di bilanciamento e BMS','B0 su P−, B1…B4 su ogni lamella di serie in ordine. Connettore inserito <b>solo dopo</b> aver verificato i pin.'],
+ ['Isolamento e chiusura','Fishpaper, angoli protetti, guaina termorestringente, etichetta. Fatto!']
+];
+let bI=0,bPlaying=false;
+function buildDraw(){
+  const s=$('buildSvg');s.innerHTML='';const ox=150,oy=70,dx=90,dy=90,r=34;
+  el('text',{x:610,y:316,'text-anchor':'end',fill:'#9aa7b6','font-size':11},s,'Pacco 4S2P visto dall\'alto');
+  if(bI>=2)el('rect',{x:ox-r-14,y:oy-r-14,width:3*dx+2*r+28,height:dy+2*r+28,rx:10,fill:'#111827',stroke:'#374151'},s);
+  const topSt=bI>=5?[[0,1],[2,3]]:[[0,0],[1,2],[3,3]];const showBottom=bI>=5;
+  if(bI>=3){(showBottom?[[0,1],[2,3]]:[[0,0],[1,2],[3,3]]).forEach(([a,b],i)=>{const rr=el('rect',{x:ox+a*dx-r+2,y:oy-r+4,width:(b-a)*dx+2*r-4,height:dy+2*r-8,rx:12,fill:'rgba(200,205,212,.25)',stroke:'#e5e7eb','stroke-width':2,class:'pop',style:`animation-delay:${i*.15}s`},s)})}
+  for(let c=0;c<4;c++)for(let k=0;k<2;k++){
+    const negTop=c%2===0,neg=showBottom?!negTop:negTop,cx=ox+c*dx,cy=oy+k*dy;
+    const g=el('g',{class:bI===0?'pop':'',style:`animation-delay:${(c*2+k)*.08}s;transform-origin:${cx}px ${cy}px`},s);
+    el('circle',{cx,cy,r,fill:'#1c2430',stroke:neg?'#3b82f6':'#ef4444','stroke-width':4},g);
+    if(bI>=1&&!neg)el('circle',{cx,cy,r:r*.75,fill:'none',stroke:'#e5e7eb','stroke-width':6,opacity:.8},g);
+    el('text',{x:cx,y:cy+8,'text-anchor':'middle',fill:neg?'#60a5fa':'#f87171','font-size':24,'font-weight':800},g,neg?'−':'+');
+    if(bI===0)el('text',{x:cx,y:cy+r+14,'text-anchor':'middle',fill:'#a3e635','font-size':10,'font-family':'JetBrains Mono'},g,'3,60 V');
+    if(bI===4&&!showBottom){[[-10,-r+10],[10,-r+10],[-10,r-10],[10,r-10]].forEach(([a,b2],j)=>{const sp=el('circle',{cx:cx+a,cy:cy+b2*.6,r:3,fill:'#fb923c',class:'pop',style:`animation-delay:${(c*2+k)*.15+j*.05}s`},s)})}
+  }
+  for(let c=0;c<4;c++)el('text',{x:ox+c*dx,y:oy+dy+r+30,'text-anchor':'middle',fill:'#9aa7b6','font-size':12,'font-family':'JetBrains Mono'},s,'G'+(c+1));
+  if(bI>=5)el('path',{d:`M${ox} ${oy+dy/2} L${ox+dx} ${oy+dy/2} L${ox+2*dx} ${oy+dy/2} L${ox+3*dx} ${oy+dy/2}`,stroke:'#fbbf24','stroke-width':4,fill:'none',class:'flow'},s);
+  if(bI>=6){const xs=[ox-r-12,ox+dx/2,ox+1.5*dx,ox+2.5*dx,ox+3*dx+r+12];['0','3,6','7,2','10,8','14,4'].forEach((v,i)=>el('text',{x:xs[i],y:20,'text-anchor':'middle',fill:'#a3e635','font-size':12,'font-family':'JetBrains Mono',class:'pop',style:`animation-delay:${i*.2}s`},s,v+' V'))}
+  if(bI>=7){const bx=250,by=262;el('rect',{x:bx,y:by,width:120,height:40,rx:6,fill:'#1e3a8a',stroke:'#60a5fa'},s);el('text',{x:bx+60,y:by+25,'text-anchor':'middle',fill:'#e8edf3','font-size':13,'font-weight':700},s,'BMS 4S');
+    [ox-r,ox+dx/2,ox+1.5*dx,ox+2.5*dx,ox+3*dx+r].forEach((x,i)=>el('path',{d:`M${x} ${oy+dy+r} Q${x} ${by-10} ${bx+15+i*22} ${by}`,stroke:['#1f2937','#ef4444','#f97316','#facc15','#22c55e'][i],'stroke-width':2.5,fill:'none',class:'pop'},s))}
+  if(bI>=8){el('rect',{x:ox-r-20,y:oy-r-20,width:3*dx+2*r+40,height:dy+2*r+40,rx:14,fill:'#1d4ed8',opacity:.55,class:'pop'},s);el('text',{x:310,y:oy+dy/2+6,'text-anchor':'middle',fill:'#fff','font-size':16,'font-weight':800},s,'Li‑ion 4S2P · 14,4 V · 10 Ah');}
+  $('buildTxt').innerHTML=`<b>${bI+1}/${BST.length} · ${BST[bI][0]}</b> — ${BST[bI][1]}`;
+}
+$('bNext').onclick=()=>{bI=Math.min(BST.length-1,bI+1);buildDraw()};$('bPrev').onclick=()=>{bI=Math.max(0,bI-1);buildDraw()};
+$('bPlay').onclick=async()=>{if(bPlaying)return;bPlaying=true;for(bI=0;bI<BST.length;bI++){buildDraw();await sleep(2200)}bI=BST.length-1;bPlaying=false};
+
+// ===== passi scritti
+const STEPS=[
+ ['Progetta','Definisci tensione (S), capacità (P), corrente e spazio disponibile con il capitolo 07. Disegna lo schema su carta con il numero di ogni gruppo.'],
+ ['Compra bene','Celle da rivenditori specializzati, tutte dello stesso modello e lotto, più qualche scorta. BMS della chimica e del numero di serie giusti.'],
+ ['Prepara il banco','Superficie non infiammabile, buona luce, niente metallo addosso, sabbia/estintore, occhiali. Copri con cartone le parti che non lavori.'],
+ ['Verifica le celle','Aspetto, peso, tensione, resistenza interna. Con celle generiche o di recupero anche capacità e autoscarica (capitolo 06). Numera ogni cella.'],
+ ['Pareggia le tensioni','Porta tutte le celle a ±0,02 V (es. 3,60 V) prima di metterle in parallelo.'],
+ ['Componi i gruppi','Con celle di capacità diverse usa la distribuzione a serpentina (sotto). Il pacco vale quanto il gruppo più debole.'],
+ ['Rondelle e supporti','Rondella sul + di ogni cella, inserimento nei supporti con versi alternati, controllo colonna per colonna. Foto dall\'alto e confronto con lo schema.'],
+ ['Prova la saldatrice','Su celle di scarto, regola l\'energia finché il test di strappo lascia il "bottoncino" sulla cella (Volume 3).'],
+ ['Pre‑stagna i punti dei fili','Sul banco, lontano dalle celle, stagna sulle lamelle i punti dove andranno i fili di bilanciamento.'],
+ ['Lamelle lato superiore','Saldatura a punti: 2 impulsi per cella per strato. Strati multipli o rame nichelato sulle serie se la corrente è alta.'],
+ ['Lamelle lato inferiore','Gira il pacco con attenzione: ora ogni lamella è a una tensione diversa.'],
+ ['Misura tutto','Da P−, ogni lamella deve salire di ~3,6 V (Li‑ion) o ~3,2–3,3 V (LFP). Se un valore non torna, fermati.'],
+ ['Fili di bilanciamento','S+1 fili, B0…BS, nell\'ordine. Fissali con Kapton e colla a caldo. Verifica i pin del connettore prima di inserirlo nel BMS.'],
+ ['Cavi principali, fusibile, BMS','Segui le istruzioni del BMS (Volume 2): di solito B− prima, poi bilanciamento, poi P−/C−. Fusibile sul positivo.'],
+ ['Collaudo','Tensione totale, uscita BMS, prima carica sorvegliata, prova breve sotto carico toccando lamelle e cavi.'],
+ ['Isolamento finale','Fishpaper sopra e sotto, angoli protetti, BMS fissato, guaina termorestringente, etichetta con chimica, configurazione, tensioni e data.']
+];
+$('stepsBox').innerHTML=STEPS.map((s,i)=>`<div class="step"><div class="num">${i+1}</div><div><h4>${s[0]}</h4><p>${s[1]}</p></div></div>`).join('');
+
+// ===== serpentina capacità
+(function(){const s=$('snakeSvg');const caps=[2610,2580,2560,2540,2520,2500,2480,2460,2440,2420,2400,2380];const S=4;
+  const groups=[[],[],[],[]];caps.forEach((c,i)=>{const row=Math.floor(i/S),pos=i%S,g=row%2===0?pos:S-1-pos;groups[g].push(c)});
+  groups.forEach((g,gi)=>{el('text',{x:90+gi*130,y:20,'text-anchor':'middle',fill:'#9aa7b6','font-size':12},s,'Gruppo '+(gi+1));
+    g.forEach((c,k)=>{const x=90+gi*130,y=40+k*34;const gg=el('g',{class:'pop',style:`animation-delay:${(k*4+gi)*.12}s;transform-origin:${x}px ${y}px`},s);el('rect',{x:x-44,y:y-12,width:88,height:24,rx:6,fill:'#1c2430',stroke:'#a3e635'},gg);el('text',{x,y:y+5,'text-anchor':'middle',fill:'#e8edf3','font-size':11,'font-family':'JetBrains Mono'},gg,c+' mAh')});
+    el('text',{x:90+gi*130,y:160,'text-anchor':'middle',fill:'#a3e635','font-size':12,'font-weight':700,'font-family':'JetBrains Mono'},s,'= '+g.reduce((a,b)=>a+b,0)+' mAh')});
+})();
+
+// ===== SOC
+(function(){const s=$('socSvg');const zones=[[0,20,'#f87171','Evita'],[20,80,'#36d399','Uso quotidiano ideale'],[80,100,'#fbbf24','Solo per viaggi lunghi']];
+  zones.forEach(([a,b,c,t])=>{const r=el('rect',{x:40+a*5.4,y:60,width:0,height:40,fill:c,opacity:.85},s);el('text',{x:40+(a+b)/2*5.4,y:125,'text-anchor':'middle',fill:c,'font-size':12,'font-weight':700},s,t);setTimeout(()=>{r.style.transition='width 1s';r.setAttribute('width',(b-a)*5.4)},300)});
+  el('rect',{x:40+40*5.4,y:52,width:20*5.4,height:56,fill:'none',stroke:'#60a5fa','stroke-width':2.5,'stroke-dasharray':'5 4'},s);
+  el('text',{x:40+50*5.4,y:44,'text-anchor':'middle',fill:'#60a5fa','font-size':12},s,'Conservazione lunga 40–60%');
+  [0,20,40,60,80,100].forEach(v=>el('text',{x:40+v*5.4,y:150,'text-anchor':'middle',fill:'#9aa7b6','font-size':10,'font-family':'JetBrains Mono'},s,v+'%'));
+})();
+
+buildDraw();design();
+</script>
+</body>
+</html>

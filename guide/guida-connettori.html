@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Guida ai Connettori</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--paper:#151b24;--paper2:#1c2430;--ink:#e8edf3;--muted:#9aa7b6;--line:#2b3644;--accent:#22d3ee;--accent2:#fbbf24;--ok:#36d399;--danger:#f87171;--blue:#60a5fa;--pos:#ef4444;--neg:#3b82f6}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 Inter,system-ui,sans-serif}
+a{color:var(--accent)}
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;z-index:20}
+header.cover{min-height:88vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 16px;background:radial-gradient(circle at 50% 35%,#0e3340 0,var(--bg) 62%)}
+.cover h1{font:800 clamp(2.2rem,8vw,4.6rem)/1.05 Inter;margin:.3em 0;letter-spacing:-.02em}
+.cover h1 span{color:var(--accent)}
+.cover .sub{font-family:Merriweather;font-style:italic;color:var(--muted);max-width:580px}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:4px 14px;font-size:.8rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase}
+.hero{width:min(360px,88vw);margin-top:24px}
+.plugL{animation:plugL 3s ease-in-out infinite}.plugR{animation:plugR 3s ease-in-out infinite}
+@keyframes plugL{0%,15%{transform:translateX(-40px)}45%,75%{transform:translateX(0)}100%{transform:translateX(-40px)}}
+@keyframes plugR{0%,15%{transform:translateX(40px)}45%,75%{transform:translateX(0)}100%{transform:translateX(40px)}}
+.zap{animation:zap 3s infinite}@keyframes zap{0%,42%{opacity:0}45%,72%{opacity:1}75%,100%{opacity:0}}
+nav.toc{max-width:860px;margin:0 auto;padding:30px 16px}
+.toc ol{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.toc a{display:flex;gap:12px;align-items:center;padding:12px 16px;background:var(--paper);border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--ink);transition:.2s}
+.toc a:hover{border-color:var(--accent);transform:translateX(4px)}
+.toc .n{font:600 .8rem JetBrains Mono;color:var(--accent);min-width:28px}
+main{max-width:860px;margin:0 auto;padding:0 16px 80px}
+section.chap{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 22px;margin:28px 0;opacity:0;transform:translateY(30px);transition:.7s}
+section.chap.in{opacity:1;transform:none}
+.kick{font:600 .75rem JetBrains Mono;color:var(--accent);letter-spacing:.2em;text-transform:uppercase}
+.chap h2{font:800 1.8rem/1.2 Inter;margin:.2em 0 .6em}
+.chap h3{font-size:1.15rem;margin:1.6em 0 .4em;color:var(--accent2)}
+.chap p,.chap li{font-family:Merriweather;font-size:.98rem}
+.note,.warn,.tip{border-radius:12px;padding:14px 16px;margin:16px 0;font-size:.95rem;border-left:4px solid}
+.note{background:#132235;border-color:var(--blue)}.warn{background:#2a1517;border-color:var(--danger)}.tip{background:#13261d;border-color:var(--ok)}
+.note b:first-child,.warn b:first-child,.tip b:first-child{display:block;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin:12px 0}
+th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em}
+td.v{font:600 .85rem JetBrains Mono;color:var(--accent2);white-space:nowrap}
+.tablewrap{overflow-x:auto}
+.mono{font-family:JetBrains Mono;font-size:.88em;background:var(--paper2);padding:1px 6px;border-radius:5px}
+.svgbox{background:#0a0e14;border:1px solid var(--line);border-radius:14px;padding:10px;margin:16px 0;overflow-x:auto}
+.svgbox svg{display:block;width:100%;height:auto;min-width:540px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+button{background:var(--paper2);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:7px 14px;font:600 .82rem Inter;cursor:pointer}
+button.on{background:var(--accent);color:#0d1117;border-color:var(--accent)}
+input[type=search],input[type=number],select{background:var(--paper2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 12px;font:inherit;width:100%}
+label.f{display:block;font-size:.78rem;color:var(--muted);margin-bottom:4px}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:14px}
+.cc{background:var(--paper2);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.cc:hover{border-color:var(--accent);transform:translateY(-2px)}
+.cc .stripe{position:absolute;left:0;top:0;bottom:0;width:4px}
+.cc h4{margin:0 0 2px;font-size:1.05rem}
+.cc .sub{font-size:.78rem;color:var(--muted)}
+.cc .specs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.chip{font:600 .72rem JetBrains Mono;padding:3px 8px;border-radius:99px;background:#0d1117;border:1px solid var(--line);color:var(--muted)}
+.chip.a{color:var(--accent2)}.chip.p{color:var(--ok)}
+.cc .more{display:none;margin-top:12px;font-size:.88rem}
+.cc.open .more{display:block}
+.cc .more b{color:var(--accent)}
+.cc ul{margin:4px 0 8px;padding-left:18px}
+.cc li{font-family:Inter;font-size:.86rem}
+.pro li::marker{content:"＋ ";color:var(--ok)}.con li::marker{content:"－ ";color:var(--danger)}
+.pic{background:#0a0e14;border:1px solid var(--line);border-radius:10px;margin:10px 0 2px;padding:4px}
+.pic svg{display:block;width:100%;height:auto}
+.result .pic{max-width:340px}
+.count{font-size:.85rem;color:var(--muted)}
+.result{background:var(--paper2);border:1px solid var(--accent);border-radius:14px;padding:14px;margin-top:12px}
+.result h4{margin:0 0 6px;color:var(--accent)}
+.footer{text-align:center;color:var(--muted);font-size:.8rem;padding:30px 16px 60px}
+.flow{stroke-dasharray:6 8;animation:flow .8s linear infinite}@keyframes flow{to{stroke-dashoffset:-28}}
+@media print{.progress,.btns{display:none}section.chap{opacity:1;transform:none}.cc .more{display:block}}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+
+<header class="cover">
+  <span class="badge">Manuale · Volume 4</span>
+  <h1>Guida ai<br><span>connettori</span></h1>
+  <p class="sub">I connettori più usati oggi: batterie, e‑bike, modellismo, solare, auto, elettronica e casa. Cosa reggono, quanto costano, dove si usano e quale scegliere.</p>
+  <svg class="hero" viewBox="0 0 360 140">
+    <g class="plugL"><rect x="40" y="45" width="110" height="50" rx="10" fill="#fbbf24"/><rect x="150" y="55" width="22" height="10" fill="#d1d5db"/><rect x="150" y="75" width="22" height="10" fill="#d1d5db"/><rect x="0" y="62" width="40" height="7" fill="#ef4444"/><rect x="0" y="72" width="40" height="7" fill="#1f2937"/></g>
+    <g class="plugR"><rect x="210" y="45" width="110" height="50" rx="10" fill="#f59e0b"/><rect x="188" y="52" width="22" height="16" rx="3" fill="#0d1117" stroke="#d1d5db"/><rect x="188" y="72" width="22" height="16" rx="3" fill="#0d1117" stroke="#d1d5db"/><rect x="320" y="62" width="40" height="7" fill="#ef4444"/><rect x="320" y="72" width="40" height="7" fill="#1f2937"/></g>
+    <g class="zap" fill="#22d3ee"><path d="M180 20 L172 40 L182 40 L176 58 L192 34 L182 34 L188 20 Z"/></g>
+  </svg>
+</header>
+
+<nav class="toc"><ol>
+  <li><a href="#c1"><span class="n">01</span>Come si legge un connettore</a></li>
+  <li><a href="#c2"><span class="n">02</span>Catalogo completo (filtri e ricerca)</a></li>
+  <li><a href="#c3"><span class="n">03</span>Confronto delle correnti</a></li>
+  <li><a href="#c4"><span class="n">04</span>Antiscintilla: perché sopra i 36 V conta</a></li>
+  <li><a href="#c5"><span class="n">05</span>Crimpare o saldare</a></li>
+  <li><a href="#c6"><span class="n">06</span>Quale connettore per il mio progetto?</a></li>
+  <li><a href="#c7"><span class="n">07</span>Consigli per la batteria 60V 16S6P</a></li>
+  <li><a href="#c8"><span class="n">08</span>Originali e falsi, errori comuni</a></li>
+</ol></nav>
+
+<main>
+
+<section class="chap" id="c1">
+  <div class="kick">Capitolo 01</div>
+  <h2>Come si legge un connettore</h2>
+  <p>Due connettori che sembrano simili possono avere caratteristiche molto diverse. Prima di scegliere, guarda sempre questi dati nella scheda tecnica.</p>
+  <div class="svgbox"><svg id="anat" viewBox="0 0 560 230"></svg></div>
+  <div class="tablewrap"><table>
+    <tr><th>Dato</th><th>Cosa significa</th><th>Attenzione a</th></tr>
+    <tr><td>Corrente continua</td><td>Ampere che il connettore regge per sempre senza scaldare troppo</td><td>Molti venditori scrivono la corrente di <b>picco</b> nel nome (XT90 = 90 A di picco, ~40–45 A continui)</td></tr>
+    <tr><td>Corrente di picco</td><td>Corrente per pochi secondi (partenze, accelerazioni)</td><td>Non usarla per dimensionare</td></tr>
+    <tr><td>Tensione nominale</td><td>Tensione massima sicura tra i contatti</td><td>Oltre i 36–48 V DC si formano archi quando colleghi sotto carico</td></tr>
+    <tr><td>Resistenza di contatto</td><td>Quanto "frena" la corrente (in milliohm)</td><td>Più bassa = meno calore. Contatti dorati e originali la tengono bassa</td></tr>
+    <tr><td>Cicli di inserzione</td><td>Quante volte puoi collegare/scollegare</td><td>JST piccoli: 30–50 cicli; Anderson, XT: centinaia o migliaia</td></tr>
+    <tr><td>Grado IP</td><td>Protezione da polvere (prima cifra) e acqua (seconda)</td><td>IP67 = immergibile brevemente. La maggior parte dei connettori hobby è IP00 (nessuna protezione)</td></tr>
+    <tr><td>Sezione cavo</td><td>Il cavo più grosso che entra nella coppetta o nel contatto</td><td>Un XT60 non accetta un AWG 8</td></tr>
+    <tr><td>Polarizzazione</td><td>Forma che impedisce di inserirlo al contrario</td><td>Banana e bullet non sono polarizzati: errore di polarità facile</td></tr>
+  </table></div>
+  <div class="note"><b>Regola pratica</b>Scegli un connettore con corrente continua almeno <b>1,5 volte</b> quella che userai davvero. Lavorerà freddo e durerà anni.</div>
+</section>
+
+<section class="chap" id="c2">
+  <div class="kick">Capitolo 02</div>
+  <h2>Catalogo completo</h2>
+  <p>Tocca una scheda per aprirla: vantaggi, svantaggi, uso, montaggio e consigli. I prezzi sono <b>indicativi</b> per una coppia (maschio + femmina) di prodotto di qualità; i cloni costano meno ma spesso valgono meno.</p>
+  <div class="row">
+    <div><label class="f">Cerca</label><input type="search" id="q" placeholder="es. XT, solare, e-bike…"></div>
+    <div><label class="f">Ordina per</label><select id="sort"><option value="name">Nome</option><option value="amp">Corrente ↑</option><option value="ampd">Corrente ↓</option><option value="price">Prezzo ↑</option></select></div>
+  </div>
+  <div class="btns" id="cats"></div>
+  <div class="count" id="count"></div>
+  <div class="cgrid" id="grid"></div>
+</section>
+
+<section class="chap" id="c3">
+  <div class="kick">Capitolo 03</div>
+  <h2>Confronto delle correnti</h2>
+  <p>Corrente continua indicativa di ciascun connettore (scala logaritmica: ogni riga verticale vale 10 volte la precedente). Tocca una categoria per filtrare.</p>
+  <div class="btns" id="chartCats"></div>
+  <div class="svgbox"><svg id="chart" viewBox="0 0 560 400"></svg></div>
+</section>
+
+<section class="chap" id="c4">
+  <div class="kick">Capitolo 04</div>
+  <h2>Antiscintilla: perché sopra i 36 V conta</h2>
+  <p>Quando colleghi una batteria a un controller, i suoi condensatori sono scarichi: per un istante assorbono una corrente enorme. Con una batteria da 12 V è solo un piccolo "tic"; a 48–60 V è un arco che annerisce e corrode i contatti, connessione dopo connessione.</p>
+  <div class="btns"><button id="asNorm" class="on">Connettore normale</button><button id="asAnti">Antiscintilla (XT90‑S, AS150, QS8)</button></div>
+  <div class="svgbox"><svg id="asSvg" viewBox="0 0 560 220"></svg></div>
+  <p id="asTxt" style="font-size:.92rem;color:var(--muted)"></p>
+  <div class="tip"><b>Come funziona</b>Nei connettori antiscintilla uno dei contatti tocca prima un <b>resistore</b> integrato: i condensatori si caricano piano attraverso di esso, e solo dopo qualche millimetro di inserimento si chiude il contatto principale. Va inserito con un movimento <b>deciso e continuo</b>: se ti fermi a metà, il resistore scalda.</div>
+</section>
+
+<section class="chap" id="c5">
+  <div class="kick">Capitolo 05</div>
+  <h2>Crimpare o saldare</h2>
+  <div class="tablewrap"><table>
+    <tr><th></th><th>Crimpatura</th><th>Saldatura</th></tr>
+    <tr><td>Connettori tipici</td><td>Anderson, Deutsch, Superseal, JST, Dupont, MC4, capicorda, Faston, Molex</td><td>XT, EC, Deans, bullet, coppette in genere</td></tr>
+    <tr><td>Vibrazioni</td><td>Ottima: il cavo resta flessibile fino al contatto</td><td>Il cavo si irrigidisce e può spezzarsi dove finisce lo stagno</td></tr>
+    <tr><td>Attrezzo</td><td>Pinza specifica per quel contatto (fondamentale)</td><td>Saldatore potente (Volume 3)</td></tr>
+    <tr><td>Errore tipico</td><td>Pinza generica: crimpatura che sembra buona ma si sfila</td><td>Giunto freddo o plastica deformata dal calore</td></tr>
+    <tr><td>Verifica</td><td>Prova di trazione decisa sul cavo</td><td>Giunto lucido, cavo ben dentro la coppetta</td></tr>
+  </table></div>
+  <div class="warn"><b>⚠ Mai stagnare un cavo prima di crimparlo</b>Lo stagno sotto pressione "scorre" lentamente (creep): dopo settimane la crimpatura si allenta, aumenta la resistenza e il contatto scalda. Crimpa sempre su rame nudo.</div>
+</section>
+
+<section class="chap" id="c6">
+  <div class="kick">Capitolo 06</div>
+  <h2>Quale connettore per il mio progetto?</h2>
+  <p>Inserisci le caratteristiche del tuo collegamento: il selettore suggerisce i connettori adatti dal catalogo.</p>
+  <div class="row">
+    <div><label class="f">Corrente continua (A)</label><input type="number" id="wA" value="40" min="0.1" step="0.5"></div>
+    <div><label class="f">Tensione (V)</label><input type="number" id="wV" value="60" min="1"></div>
+    <div><label class="f">Uso</label><select id="wU">
+      <option value="batt">Batteria / e‑bike / monopattino</option><option value="rc">Modellismo / droni</option><option value="solar">Fotovoltaico</option><option value="auto">Auto / moto / camper / nautica</option><option value="pcb">Elettronica / schede</option><option value="casa">Casa / rete 230 V</option><option value="lab">Laboratorio / banco prova</option>
+    </select></div>
+    <div><label class="f">Esposto ad acqua o polvere?</label><select id="wW"><option value="0">No</option><option value="1">Sì</option></select></div>
+  </div>
+  <div id="wRes"></div>
+</section>
+
+<section class="chap" id="c7">
+  <div class="kick">Capitolo 07</div>
+  <h2>Consigli per la batteria 60V 16S6P</h2>
+  <div class="tablewrap"><table>
+    <tr><th>Collegamento</th><th>Consigliato</th><th>Alternative</th><th>Perché</th></tr>
+    <tr><td>Uscita principale (scarica, 30–50 A)</td><td class="v">XT90‑S</td><td>AS150 / QS8 (oltre 60 A), Anderson SB50</td><td>Antiscintilla obbligatorio a 60 V, compatto, economico</td></tr>
+    <tr><td>Porta di ricarica (2–5 A)</td><td class="v">XLR 3 pin o GX16</td><td>DC 5,5×2,5 mm (solo ≤ 3 A), Anderson PP15/30</td><td>Facile da trovare sui caricatori e‑bike; non si confonde con l'uscita</td></tr>
+    <tr><td>Connettore di bilanciamento</td><td class="v">JST‑XH / quello del BMS</td><td>—</td><td>Si usa quello fornito con il BMS: piedinatura garantita</td></tr>
+    <tr><td>Motore / sensori e‑bike</td><td class="v">Julet / Higo</td><td>—</td><td>Standard del settore, impermeabili, codificati per colore</td></tr>
+    <tr><td>Sonda di temperatura</td><td class="v">JST‑PH / XH</td><td>—</td><td>Correnti minime</td></tr>
+  </table></div>
+  <div class="warn"><b>⚠ Porta di ricarica e uscita diversi</b>Non usare lo stesso tipo di connettore per caricare e per scaricare: prima o poi qualcuno collega il caricatore al posto sbagliato. Anche il caricatore deve avere il connettore della porta di ricarica, non quello del motore.</div>
+  <div class="note"><b>Polarità XLR per caricatori e‑bike</b>Non esiste uno standard unico per la piedinatura dei caricatori XLR. Verifica sempre con il multimetro sul tuo caricatore prima di saldare la presa sulla batteria.</div>
+</section>
+
+<section class="chap" id="c8">
+  <div class="kick">Capitolo 08</div>
+  <h2>Originali e falsi, errori comuni</h2>
+  <h3>Riconoscere i falsi</h3>
+  <ul>
+    <li><b>XT originali (Amass):</b> marchio stampato nella plastica, plastica gialla che non si scioglie facilmente, contatti dorati spessi e precisi. I falsi hanno plastica che si deforma con il saldatore e contatti sottili che si allargano.</li>
+    <li><b>Anderson originali:</b> marchio "Anderson Power Products" sul corpo; i cloni hanno contatti che si scaldano a metà della corrente dichiarata.</li>
+    <li><b>MC4:</b> mescolare marche diverse (anche se "compatibili") può invalidare la garanzia dei pannelli e causare punti caldi. Usa la stessa marca maschio/femmina.</li>
+    <li>Prezzo troppo basso su prodotti "di marca" = quasi sempre falso.</li>
+  </ul>
+  <h3>Errori comuni</h3>
+  <ul>
+    <li>Dimensionare con la corrente di picco invece che con quella continua.</li>
+    <li>Connettori non polarizzati (banana, bullet) senza segno di colore: un'inversione di polarità brucia BMS e controller.</li>
+    <li>Cavo troppo grosso per la coppetta, con fili tagliati per farlo entrare: sezione ridotta e punto caldo.</li>
+    <li>Contatti maschio "vivi" sul lato della batteria: la batteria deve avere i contatti <b>femmina</b> (protetti), il carico i maschi.</li>
+    <li>Collegare e scollegare connettori non antiscintilla a 48–60 V sotto carico.</li>
+    <li>Usare JST/Dupont per correnti di potenza: si fondono.</li>
+  </ul>
+</section>
+
+</main>
+<div class="footer">Guida ai connettori · Volume 4 della serie batteria 60V 16S6P<br>Correnti e prezzi sono indicativi e variano per produttore, sezione del cavo e temperatura: per progetti importanti fai sempre riferimento alla scheda tecnica del produttore.</div>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.04});
+document.querySelectorAll('.chap').forEach(s=>io.observe(s));
+addEventListener('scroll',()=>{const h=document.documentElement;document.getElementById('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'});
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;if(p)p.appendChild(e);return e}
+const $=id=>document.getElementById(id);
+
+// ===== categorie
+const CATS={batt:['Batterie & e‑bike','#fbbf24'],rc:['Modellismo & droni','#a78bfa'],solar:['Fotovoltaico','#34d399'],auto:['Auto, moto, nautica','#f87171'],pcb:['Elettronica & schede','#60a5fa'],casa:['Casa & rete 230 V','#f472b6'],lab:['Laboratorio','#22d3ee'],dati:['Dati & ricarica dispositivi','#94a3b8']};
+
+// ===== dati connettori: nome, sottotitolo, categorie, A continui, V max, prezzo €, montaggio, uso, pro, contro, note
+const C=[
+ ['XT30','Amass, piccolo e polarizzato',['rc','batt'],15,500,1,'Saldatura','Droni piccoli, batterie 2–4S, luci, piccoli accessori, uscite ausiliarie di batterie e‑bike',['Piccolissimo e leggero','Polarizzato, economico','Molto diffuso'],['Coppetta piccola (max AWG 16)','Non antiscintilla'],'Ideale per uscite ausiliarie a bassa corrente da un pacco grande.'],
+ ['XT60','Lo standard del modellismo',['rc','batt','lab'],30,500,1.5,'Saldatura','Batterie LiPo per auto RC e droni, monopattini, power station, alimentatori da banco, piccoli e‑bike',['Diffusissimo: si trova ovunque','Polarizzato, presa salda','Economico'],['Non antiscintilla: sopra i 36 V fa scintille','Scalda oltre i 40 A continui'],'Per l\'antiscintilla a 48–60 V si passa di solito all\'XT90‑S. La versione XT60H ha un guscio posteriore che protegge le saldature.'],
+ ['XT90','Amass, potenza media',['rc','batt'],45,500,3,'Saldatura','E‑bike, monopattini potenti, RC grandi, batterie di accumulo piccole',['Regge bene 40–45 A continui','Polarizzato','Prezzo basso'],['Senza antiscintilla: scintilla forte a 48–60 V','Coppetta per AWG 10 max'],'Per batterie oltre i 36 V scegli la versione XT90‑S.'],
+ ['XT90‑S','XT90 antiscintilla',['batt','rc'],45,500,5,'Saldatura','Uscita principale di batterie e‑bike 36–72 V, monopattini, go‑kart elettrici',['Resistore antiscintilla integrato','Compatibile meccanicamente con XT90','Lo standard per batterie e‑bike fai‑da‑te'],['Il resistore va solo su un lato (polo negativo, lato batteria)','Va inserito con un colpo deciso'],'Di norma il polo con il resistore va sul negativo, lato batteria: segui le indicazioni del produttore.'],
+ ['XT150','Amass, alta corrente',['rc','batt'],60,500,5,'Saldatura','RC giganti, e‑moto leggere, batterie di accumulo',['Contatti a pallottola da 6 mm in guscio polarizzato','Corrente alta in poco spazio'],['Non antiscintilla','Ingombrante'],''],
+ ['AS150','Antiscintilla alta corrente',['batt','rc'],80,500,8,'Saldatura','E‑moto, monopattini da 60–72 V potenti, batterie per go‑kart',['Antiscintilla','Correnti elevate'],['Più grande e costoso','Inserimento duro'],'Spesso venduto come AS150U con contatti di segnale aggiuntivi.'],
+ ['QS8','Antiscintilla a 8 mm',['batt','rc'],100,500,7,'Saldatura','E‑moto ad alta potenza, scooter, droni pesanti',['Molto robusto, antiscintilla','Regge picchi molto alti'],['Ingombrante e pesante','Serve cavo AWG 8 e saldatore potente'],''],
+ ['EC3','Connettore a pallottola 3,5 mm',['rc'],40,null,1.5,'Saldatura','RC (storico standard E‑flite/Horizon)',['Robusto, contatti a pallottola','Polarizzato'],['Ormai superato da XT60','Difficile da disinnestare'],''],
+ ['EC5','Pallottola 5 mm',['rc','batt'],80,null,2,'Saldatura','Auto RC grandi, booster di avviamento auto (pinze)',['Ottimo rapporto corrente/prezzo','Usato sui cavi delle "jump starter"'],['Non antiscintilla','Duro da staccare'],''],
+ ['EC8','Pallottola 8 mm',['rc','auto'],150,null,4,'Saldatura','Avviatori auto portatili, RC molto grandi',['Correnti altissime'],['Ingombrante','Non antiscintilla'],''],
+ ['Deans / T‑plug','Forma a "T"',['rc'],40,null,1.5,'Saldatura','RC (vecchio standard), ancora usato in alcune auto RC',['Piccolo e con buona corrente'],['Molti cloni di bassa qualità','Presa che si allenta con l\'uso','Facile scottare la plastica saldando'],''],
+ ['MR30','Amass, tre poli',['rc'],15,null,1.5,'Saldatura','Collegamento ESC‑motore nei droni FPV',['3 poli in un connettore compatto','Polarizzato'],['Solo correnti medie'],''],
+ ['Bullet 4 mm','Pallottola dorata',['rc','lab'],60,null,1,'Saldatura','Motori brushless, ESC, adattatori',['Bassa resistenza','Economico'],['Non polarizzato: rischio di inversioni','Contatti scoperti, va isolato con guaina'],'Disponibili da 2 a 8 mm; più grande = più corrente.'],
+ ['Bullet 5,5–8 mm','Pallottole grandi',['rc','batt'],120,null,2,'Saldatura','Motori grandi, collegamenti di potenza',['Correnti molto alte'],['Non polarizzato','Serve isolamento'],''],
+ ['Anderson Powerpole','PP15 / PP30 / PP45',['lab','auto','batt'],45,600,3,'Crimpatura (o saldatura)','Radioamatori, laboratori, camper, batterie e‑bike (porta di ricarica), robotica',['Modulare e componibile','Genderless: tutti i pezzi uguali','Molto affidabile, standard dei radioamatori'],['Serve la pinza specifica','Assemblaggio un po\' laborioso'],'Lo standard radioamatoriale prevede rosso a destra, linguetta in alto.'],
+ ['Anderson SB50 / SB120 / SB175','Grandi, per carrelli e accumuli',['auto','batt','lab'],50,600,12,'Crimpatura','Carrelli elevatori, camper, batterie di avviamento, accumuli, e‑moto',['Robustissimi, molti cicli','Colori codificati per tensione'],['Grandi e pesanti','Crimpatrice dedicata costosa'],'SB50 = 50 A, SB120 = 120 A, SB175 = 175 A (valori nominali).'],
+ ['MC4','Standard fotovoltaico',['solar'],30,1500,4,'Crimpatura','Pannelli solari, stringhe FV, impianti off‑grid e camper',['IP67/IP68, resiste a UV e intemperie','Tensione molto alta (fino a 1000–1500 V DC)','Universale nel solare'],['Serve pinza MC4 e chiave per stringere','Mescolare marche diverse è sconsigliato'],'Mai scollegare un MC4 sotto carico: fa un arco pericoloso a quelle tensioni.'],
+ ['Julet / Higo','Connettori e‑bike impermeabili',['batt'],25,null,12,'Precablato','Motori mozzo, display, freni, acceleratori, luci di e‑bike',['Impermeabili, codificati per colore','Standard dei kit di conversione e‑bike'],['Si comprano già cablati','Molte varianti di numero di poli: verificare'],'Prezzo indicativo per una prolunga/cavo con connettore.'],
+ ['XLR 3 pin (ricarica)','Presa caricatore e‑bike',['batt'],10,null,5,'Saldatura','Porta di ricarica di batterie e‑bike e monopattini',['Robusto, con ritenzione','Molto comune sui caricatori'],['Piedinatura non standard tra produttori','Solo per correnti di ricarica'],'Verificare i poli con il multimetro.'],
+ ['GX12 / GX16','Connettori "aviation"',['batt','lab'],7,250,3,'Saldatura','Porta di ricarica, sensori, quadri, strumenti',['Ghiera a vite: non si sfila','Da 2 a 8 poli'],['Corrente bassa','Saldare i piccoli contatti richiede pazienza'],'Non collegarlo/scollegarlo sotto tensione: i pin si toccano durante la rotazione.'],
+ ['DC barrel 5,5 mm','Spinotto coassiale',['pcb','lab','batt'],3,null,0.8,'Saldatura','Alimentatori di router, monitor, luci LED, piccoli caricatori',['Universale e economico'],['Due misure interne (2,1 / 2,5) che si confondono','Polarità centrale non standard','Bassa corrente'],'Il simbolo con il "+" al centro indica il polo positivo sul pin centrale.'],
+ ['JST‑XH','Passo 2,5 mm',['batt','rc','pcb'],3,250,0.2,'Crimpatura','Cavi di bilanciamento LiPo, BMS, ventole, sensori',['Piccolo, polarizzato','Standard dei bilanciamenti'],['Crimpatura minuscola','Pochi cicli di inserzione'],''],
+ ['JST‑PH','Passo 2,0 mm',['pcb','batt'],2,100,0.2,'Crimpatura','Batterie piccole (1S), sonde NTC, schede elettroniche',['Piccolissimo'],['Molto delicato'],'Su piccole LiPo la polarità varia tra produttori: verificare sempre.'],
+ ['JST‑RCY (BEC)','Rosso, due poli',['rc'],3,null,0.3,'Crimpatura/saldatura','Ricevitori, piccoli servi, luci RC',['Economico, comune'],['Bassa corrente'],''],
+ ['JST‑SM','Connettore volante per LED',['pcb','casa'],3,250,0.3,'Crimpatura','Strisce LED, cablaggi interni',['Aggancio a scatto'],['Bassa corrente','Plastica fragile'],''],
+ ['Dupont 2,54 mm','Pin header',['pcb'],2,null,0.05,'Crimpatura','Arduino, Raspberry Pi, breadboard, prototipi',['Economicissimo','Ovunque nell\'elettronica hobby'],['Si sfila facilmente','Nessuna polarizzazione nei singoli'],''],
+ ['Morsetto a vite / da PCB','Terminal block',['pcb','lab','casa'],15,300,0.5,'Vite','Schede di controllo, alimentatori, relè, quadri',['Nessun attrezzo speciale','Riutilizzabile'],['Le viti si allentano con le vibrazioni','Usare puntali sui cavi a trefoli'],''],
+ ['Wago 221','Morsetto a leva',['casa','lab','auto'],32,450,0.5,'A leva','Impianti elettrici domestici, luci, giunzioni rapide',['Velocissimo, riapribile','Accetta cavi rigidi e flessibili diversi'],['Non per vibrazioni forti','Da posare in scatola di derivazione'],'Prezzo indicativo per un singolo morsetto.'],
+ ['Faston (6,3 mm)','Linguette a innesto',['auto','casa'],15,null,0.2,'Crimpatura','Elettrodomestici, interruttori, relè auto, altoparlanti',['Economico e veloce'],['Va isolato','Si allenta con il calore'],''],
+ ['Capicorda a occhiello','Ring terminal',['auto','batt','lab'],100,null,0.5,'Crimpatura','Morsetti di batterie auto, inverter, sbarre, BMS grandi',['Non si sfila mai','Dimensionabile a qualunque corrente'],['Serve una vite/bullone','Crimpatrice adatta alla sezione'],'La corrente dipende dalla sezione del cavo.'],
+ ['Deutsch DT / DTP','Standard automotive',['auto','batt'],13,48,6,'Crimpatura','Mezzi agricoli, camion, moto, veicoli fuoristrada, e‑moto',['IP67/IP68, resiste a vibrazioni e acqua','Molto affidabile'],['Crimpatrice specifica','Più costoso'],'DT: ~13 A per contatto, DTP: ~25 A, DTHD: fino a 100 A.'],
+ ['Superseal 1.5','Automotive impermeabile',['auto'],14,null,2,'Crimpatura','Fari aggiuntivi, sensori auto e moto',['Impermeabile ed economico'],['Crimpatura da fare bene'],''],
+ ['SAE a 2 poli','Accessori 12 V',['auto','solar'],10,null,3,'Saldatura/crimpatura','Mantenitori di carica, pannelli solari portatili, moto',['Facile, comune','Genderless'],['Polarità a volte invertita tra marche','Bassa corrente'],''],
+ ['Presa accendisigari 12 V','Spina auto',['auto'],10,null,4,'Precablato','Accessori auto, frigo portatili, compressori',['Ovunque nelle auto'],['Contatto poco affidabile','Corrente limitata (spesso fusibile da 10–15 A)'],''],
+ ['Banana 4 mm','Laboratorio',['lab'],20,1000,1,'Vite/saldatura','Multimetri, alimentatori da banco, cavi di prova',['Universale nei laboratori','Versioni di sicurezza per alte tensioni'],['Non polarizzato','Si sfila facilmente'],'Usare banane "di sicurezza" (schermate) oltre i 60 V.'],
+ ['Spina CH tipo J (T12/T13)','Svizzera, 10 A',['casa'],10,250,null,'—','Tutti gli apparecchi domestici svizzeri; T23 per 16 A',['Standard nazionale'],['Non compatibile con Schuko'],'Usare adattatori certificati per apparecchi con spina estera.'],
+ ['Spina IT tipo L / Schuko F','Italia ed Europa, 10–16 A',['casa'],16,250,null,'—','Elettrodomestici in Italia e nel resto d\'Europa',['Diffusione europea (Schuko)'],['In Svizzera non entra nelle prese normali'],''],
+ ['IEC C13/C14','Cavo di alimentazione',['casa','lab'],10,250,4,'Precablato','PC, monitor, stampanti, strumenti, alimentatori',['Standard mondiale','Cavo sostituibile'],['Si sfila se tirato'],'C7 ("a 8") per apparecchi piccoli, C5 ("a trifoglio") per notebook, C19 per 16 A.'],
+ ['USB‑C (USB PD)','Ricarica e dati',['dati'],5,48,10,'Precablato','Telefoni, laptop, tablet, power bank, console, monitor',['Reversibile','Fino a 240 W con USB PD 3.1 (48 V, 5 A)','Dati, video e ricarica in un solo cavo'],['Cavi tutti uguali fuori ma diversi dentro (velocità e watt)','Cavi economici spesso limitati a 60 W'],'Per oltre 60 W serve un cavo con chip "e‑marker" da 5 A.'],
+ ['USB‑A','Il classico rettangolare',['dati'],3,5,3,'Precablato','Chiavette, periferiche, caricatori più vecchi',['Ancora diffusissimo'],['Non reversibile','Potenza limitata'],''],
+ ['HDMI / DisplayPort','Video digitale',['dati'],null,null,10,'Precablato','TV, monitor, console, proiettori',['Video e audio in un cavo'],['Le versioni (2.0, 2.1, DP 2.1) cambiano la banda'],''],
+ ['RJ45','Rete Ethernet',['dati','casa'],1,60,0.5,'Crimpatura','Reti cablate, telecamere PoE, router, domotica',['Affidabile, anche con alimentazione PoE'],['Crimpatura e ordine dei fili (T568A/B) da rispettare'],'Con PoE porta anche alimentazione (fino a ~90 W con PoE++).'],
+];
+const ICONC={'Saldatura':'🔥','Crimpatura':'🗜️','Precablato':'🔌','Vite':'🔩','A leva':'🔧'};
+
+// ===== disegni dei connettori (vista laterale + frontale)
+const R=(x,y,w,h,f,rx=0,ex='')=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${f}" ${ex}/>`;
+const Ci=(cx,cy,r,f,ex='')=>`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${f}" ${ex}/>`;
+const P=(d,f,ex='')=>`<path d="${d}" fill="${f}" ${ex}/>`;
+const Tx=(x,y,t,s=8,f='#9aa7b6',a='middle')=>`<text x="${x}" y="${y}" font-size="${s}" fill="${f}" text-anchor="${a}" font-family="Inter">${t}</text>`;
+const GOLD='#e0b84a',MET='#cbd5e1',DARK='#0a0e14';
+const wires=(y1,y2,x=0,w=34,c1='#ef4444',c2='#1f2937',t=6)=>R(x,y1-t/2,w,t,c1,2)+R(x,y2-t/2,w,t,c2,2,'stroke="#475569" stroke-width=".6"');
+const wrap=(inner,lbl1='laterale',lbl2='frontale')=>`<svg viewBox="0 0 230 120" xmlns="http://www.w3.org/2000/svg">${inner}${Tx(70,114,lbl1)}${Tx(182,114,lbl2)}</svg>`;
+
+function xt(o){const s=o.s||1,c=o.c||'#f2c230',w=46*s,h=26*s,cy=55,x=34,r=5*s;
+  let g=wires(cy-6*s,cy+6*s,0,34,'#ef4444','#1f2937',5*s);
+  g+=P(`M${x+6*s} ${cy-h/2} L${x+w} ${cy-h/2} L${x+w} ${cy+h/2} L${x} ${cy+h/2} L${x} ${cy-h/2+6*s} Z`,c);
+  g+=R(x+w,cy-6*s-2*s,18*s,4*s,GOLD,1)+R(x+w,cy+6*s-2*s,18*s,4*s,GOLD,1);
+  if(o.lab)g+=Tx(x+w/2,cy+3,o.lab,7*s,'#3f2d00');
+  const fx=182,fw=34*s+8,fh=20*s+6,ch=6*s;
+  g+=P(`M${fx-fw/2+ch} ${cy-fh/2} L${fx+fw/2} ${cy-fh/2} L${fx+fw/2} ${cy+fh/2} L${fx-fw/2+ch} ${cy+fh/2} L${fx-fw/2} ${cy+fh/2-ch} L${fx-fw/2} ${cy-fh/2+ch} Z`,c);
+  const n=o.n||2;for(let i=0;i<n;i++){const px=n===2?fx-9*s+i*18*s:fx-12*s+i*12*s;g+=Ci(px,cy,r,DARK)+Ci(px,cy,r*.6,'none',`stroke="${GOLD}" stroke-width="1.5"`)}
+  if(o.anti)g+=R(fx-9*s-3,cy-fh/2-6,6,5,'#fde047',1)+Tx(fx-9*s,cy-fh/2-9,'R',7,'#fde047');
+  if(o.sig)g+=Ci(fx+fw/2-5,cy-fh/2+5,1.8,GOLD)+Ci(fx+fw/2-5,cy+fh/2-5,1.8,GOLD);
+  return wrap(g)}
+function ec(o){const s=o.s||1,cy=55;let g=wires(cy-6*s,cy+6*s,0,32,'#ef4444','#1f2937',5*s);
+  g+=R(32,cy-14*s,48*s,28*s,'#2563eb',6*s)+R(32+48*s,cy-8*s,14*s,4*s,GOLD,1)+R(32+48*s,cy+4*s,14*s,4*s,GOLD,1);
+  const fx=182;g+=P(`M${fx-22*s} ${cy-12*s} L${fx+18*s} ${cy-12*s} L${fx+24*s} ${cy} L${fx+18*s} ${cy+12*s} L${fx-22*s} ${cy+12*s} Z`,'#2563eb');
+  g+=Ci(fx-10*s,cy,6*s,DARK)+Ci(fx+8*s,cy,6*s,DARK)+Ci(fx-10*s,cy,3*s,GOLD)+Ci(fx+8*s,cy,3*s,GOLD);return wrap(g)}
+function deans(){const cy=55;let g=wires(cy-6,cy+6,0,40);g+=R(40,cy-14,40,28,'#dc2626',4)+R(80,cy-9,14,3,GOLD)+R(80,cy+5,14,3,GOLD);
+  const fx=182;g+=R(fx-24,cy-20,48,40,'#dc2626',5)+R(fx-14,cy-12,28,5,GOLD)+R(fx-2.5,cy-4,5,18,GOLD);return wrap(g)}
+function mr30(){const cy=55;let g='';['#ef4444','#1f2937','#facc15'].forEach((c,i)=>g+=R(0,cy-10+i*10-2,34,4,c,2));
+  g+=P(`M40 ${cy-14} L84 ${cy-14} L84 ${cy+14} L34 ${cy+14} L34 ${cy-8} Z`,'#f2c230');
+  const fx=182;g+=P(`M${fx-24} ${cy-14} L${fx+24} ${cy-14} L${fx+24} ${cy+14} L${fx-18} ${cy+14} L${fx-24} ${cy+8} Z`,'#f2c230');
+  [-12,0,12].forEach(d=>g+=Ci(fx+d,cy,4,DARK)+Ci(fx+d,cy,2,GOLD));return wrap(g)}
+function bullet(o){const s=o.s||1,cy=55;let g=R(0,cy-3*s,30,6*s,'#ef4444',2);
+  g+=R(30,cy-6*s,40,12*s,GOLD,3)+R(70,cy-4*s,26,8*s,GOLD,4);for(let i=0;i<3;i++)g+=R(76+i*6,cy-4*s,1.4,8*s,'#8a6a1a');
+  g+=R(104,cy-8*s,30,16*s,GOLD,3)+R(134,cy-3*s,20,6*s,'#1f2937',2);
+  const fx=190;g+=Ci(fx,cy,12*s,GOLD)+Ci(fx,cy,7*s,DARK);return wrap(g,'maschio · femmina','sezione')}
+function anderson(){const cy=55;let g=R(0,cy-12,26,6,'#ef4444',2)+R(0,cy+6,26,6,'#1f2937',2);
+  g+=R(26,cy-20,58,18,'#dc2626',3)+R(26,cy+2,58,18,'#111827',3,'stroke="#475569"')+R(84,cy-14,12,4,MET)+R(84,cy+8,12,4,MET);
+  const fx=182;g+=R(fx-30,cy-16,28,32,'#dc2626',3)+R(fx+2,cy-16,28,32,'#111827',3,'stroke="#475569"');
+  g+=R(fx-22,cy-8,12,4,MET)+R(fx+10,cy-8,12,4,MET)+R(fx-22,cy+4,4,8,'#7f1d1d')+R(fx+18,cy+4,4,8,'#374151');return wrap(g)}
+function sb(){const cy=55;let g=R(0,cy-10,24,8,'#ef4444',3)+R(0,cy+2,24,8,'#1f2937',3);
+  g+=R(24,cy-24,70,48,'#6b7280',6)+R(40,cy-34,38,10,'#4b5563',4);
+  const fx=182;g+=R(fx-34,cy-26,68,52,'#6b7280',6)+R(fx-24,cy-14,18,28,DARK,3)+R(fx+6,cy-14,18,28,DARK,3)+R(fx-18,cy-10,6,20,MET)+R(fx+12,cy-10,6,20,MET);return wrap(g)}
+function mc4(){const cy=55;let g=R(0,cy-3,16,6,'#111827',2,'stroke="#475569"');
+  g+=R(16,cy-9,44,18,'#1f2937',5)+R(24,cy-11,14,22,'#111827',2,'stroke="#374151"');for(let i=0;i<4;i++)g+=R(26+i*3,cy-11,1,22,'#374151');
+  g+=R(60,cy-7,10,14,MET,2)+R(70,cy-10,36,20,'#1f2937',5)+R(82,cy-12,14,24,'#111827',2,'stroke="#374151"')+R(106,cy-3,22,6,'#111827',2,'stroke="#475569"');
+  const fx=184;g+=Ci(fx,cy,18,'#1f2937')+Ci(fx,cy,9,DARK)+Ci(fx,cy,4,MET)+R(fx-24,cy-4,6,8,'#1f2937')+R(fx+18,cy-4,6,8,'#1f2937');return wrap(g,'maschio + femmina')}
+function julet(){const cy=55;let g=R(0,cy-4,22,8,'#111827',3,'stroke="#475569"');
+  g+=R(22,cy-10,34,20,'#1f2937',6)+R(56,cy-11,6,22,'#16a34a',2)+R(62,cy-10,34,20,'#1f2937',6)+R(96,cy-4,24,8,'#111827',3,'stroke="#475569"');
+  g+=P(`M34 ${cy-3} L44 ${cy-3} L44 ${cy-6} L50 ${cy} L44 ${cy+6} L44 ${cy+3} L34 ${cy+3}Z`,'#e5e7eb')+P(`M84 ${cy-3} L74 ${cy-3} L74 ${cy-6} L68 ${cy} L74 ${cy+6} L74 ${cy+3} L84 ${cy+3}Z`,'#e5e7eb');
+  const fx=184;g+=Ci(fx,cy,18,'#1f2937')+Ci(fx,cy,14,'#16a34a','opacity=".25"');[[0,-7],[-7,4],[7,4],[0,0]].forEach(([a,b])=>g+=Ci(fx+a,cy+b,2.4,GOLD));g+=R(fx-3,cy-20,6,5,'#e5e7eb');return wrap(g,'frecce allineate')}
+function xlr(){const cy=55;let g=R(0,cy-4,28,8,'#111827',3,'stroke="#475569"')+R(28,cy-12,30,24,'#111827',4)+R(58,cy-13,40,26,'#9ca3af',3)+R(98,cy-11,6,22,'#6b7280');
+  const fx=184;g+=Ci(fx,cy,20,'#9ca3af')+Ci(fx,cy,16,DARK)+R(fx-2,cy-20,4,6,'#9ca3af');[[-8,-4],[8,-4],[0,8]].forEach(([a,b])=>g+=Ci(fx+a,cy+b,3,GOLD));return wrap(g)}
+function gx(o){const n=o.n||4,cy=55;let g=R(0,cy-4,26,8,'#111827',3,'stroke="#475569"')+R(26,cy-10,30,20,'#9ca3af',3)+R(56,cy-13,26,26,'#d1d5db',3);
+  for(let i=0;i<7;i++)g+=R(58+i*3.4,cy-13,1,26,'#9ca3af');g+=R(82,cy-9,20,18,'#9ca3af',2);
+  const fx=184;g+=Ci(fx,cy,19,'#d1d5db')+Ci(fx,cy,14,DARK)+R(fx-2,cy-14,4,4,'#d1d5db');for(let i=0;i<n;i++){const a=Math.PI*2*i/n+Math.PI/2;g+=Ci(fx+Math.cos(a)*7,cy+Math.sin(a)*7,2,GOLD)}return wrap(g,'ghiera filettata')}
+function barrel(){const cy=55;let g=R(0,cy-3,30,6,'#111827',2,'stroke="#475569"')+R(30,cy-9,40,18,'#111827',4,'stroke="#374151"')+R(70,cy-6,30,12,MET,1)+R(100,cy-2,4,4,'#94a3b8');
+  const fx=184;g+=Ci(fx,cy,14,MET)+Ci(fx,cy,10,DARK)+Ci(fx,cy,3,'#6b7280');g+=Tx(fx,cy+28,'Ø 5,5 / 2,1–2,5',7);return wrap(g)}
+function jst(o){const n=o.n||2,c=o.c||'#f5f5f4',p=o.p||9,cy=55,cols=o.w||['#ef4444','#1f2937','#facc15','#3b82f6','#22c55e','#f97316'];
+  let g='';for(let i=0;i<n;i++)g+=R(0,cy-n*p/2+i*p+p/2-1.5,40,3,cols[i%cols.length],1);
+  g+=R(40,cy-n*p/2-3,30,n*p+6,c,2)+R(46,cy-n*p/2-7,14,4,c,1);
+  const fx=184,fw=n*p+8;g+=R(fx-fw/2,cy-10,fw,20,c,2);for(let i=0;i<n;i++)g+=R(fx-fw/2+4+i*p+1,cy-5,p-3,10,DARK,1)+R(fx-fw/2+4+i*p+p/2-1,cy-2,2,4,GOLD);
+  g+=R(fx-6,cy-14,12,4,c,1);return wrap(g,'cavi crimpati')}
+function dupont(){const cy=55;let g='';['#ef4444','#f97316','#facc15'].forEach((c,i)=>g+=R(0,cy-12+i*12-1.5,40,3,c,1)+R(40,cy-12+i*12-4,22,8,'#111827',1,'stroke="#374151"'));
+  const fx=184;g+=R(fx-24,cy-6,48,12,'#111827',1);for(let i=0;i<6;i++)g+=R(fx-21+i*8,cy-26,2,46,GOLD);return wrap(g,'cavetti femmina','pin header')}
+function term(){const cy=55;let g=R(10,cy-24,90,48,'#16a34a',3);for(let i=0;i<3;i++){g+=Ci(28+i*28,cy-8,7,MET)+R(24+i*28,cy-9,8,2,'#475569')+R(24+i*28,cy+8,8,10,DARK,1)}
+  const fx=184;g+=R(fx-30,cy-22,60,44,'#16a34a',3)+R(fx-24,cy-6,16,14,DARK,1)+R(fx+8,cy-6,16,14,DARK,1)+Ci(fx-16,cy-14,4,MET)+Ci(fx+16,cy-14,4,MET);return wrap(g,'dall\'alto','ingresso cavi')}
+function wago(){const cy=55;let g=R(16,cy-22,84,44,'rgba(203,213,225,.25)',5,'stroke="#94a3b8"');for(let i=0;i<3;i++)g+=R(24+i*25,cy-20,18,26,'#f97316',3)+R(28+i*25,cy+10,10,8,MET,1);
+  const fx=184;g+=R(fx-24,cy-24,48,48,'rgba(203,213,225,.25)',5,'stroke="#94a3b8"')+R(fx-16,cy-30,32,10,'#f97316',3)+Ci(fx,cy+6,7,DARK)+R(fx-1.5,cy+2,3,8,'#d97706');return wrap(g,'3 poli, leve aperte','lato ingresso')}
+function faston(){const cy=55;let g=R(0,cy-3,30,6,'#2563eb',2)+R(30,cy-8,22,16,'#2563eb',3)+R(52,cy-6,40,12,MET,1)+Ci(78,cy,2.5,DARK);
+  g+=R(100,cy-3,20,6,'#ef4444',2);
+  const fx=184;g+=R(fx-34,cy-3,16,6,'#ef4444',2)+R(fx-18,cy-8,18,16,'#ef4444',3)+P(`M${fx} ${cy-8} L${fx+30} ${cy-8} Q${fx+34} ${cy} ${fx+30} ${cy+8} L${fx} ${cy+8} Z`,MET);return wrap(g,'maschio','femmina')}
+function ring(){const cy=55;let g=R(0,cy-4,34,8,'#ef4444',3)+R(34,cy-8,30,16,'#dc2626',4)+R(64,cy-5,18,10,MET)+Ci(96,cy,16,MET)+Ci(96,cy,7,DARK);
+  const fx=184;g+=Ci(fx,cy,20,MET)+Ci(fx,cy,9,DARK)+Tx(fx,cy+32,'foro per bullone M5–M10',7);return wrap(g,'capicorda','')}
+function deutsch(){const cy=55;let g=R(0,cy-8,24,6,'#ef4444',2)+R(0,cy+2,24,6,'#1f2937',2)+R(24,cy-14,60,28,'#6b7280',4)+R(84,cy-12,8,24,'#f97316',2)+R(40,cy-20,24,6,'#4b5563',2);
+  const fx=184;g+=R(fx-24,cy-18,48,36,'#6b7280',5)+R(fx-18,cy-4,36,8,'#f97316',2);g+=Ci(fx-8,cy-10,3,DARK)+Ci(fx+8,cy-10,3,DARK)+Ci(fx-8,cy+10,3,DARK)+Ci(fx+8,cy+10,3,DARK);return wrap(g,'','cuneo arancio di blocco')}
+function superseal(){const cy=55;let g=R(0,cy-6,24,4,'#ef4444',2)+R(0,cy+2,24,4,'#1f2937',2)+R(24,cy-12,56,24,'#111827',3,'stroke="#374151"');for(let i=0;i<3;i++)g+=R(82+i*4,cy-10,3,20,'#facc15');
+  const fx=184;g+=R(fx-22,cy-16,44,32,'#111827',4,'stroke="#374151"')+Ci(fx-8,cy,4,DARK,'stroke="#facc15"')+Ci(fx+8,cy,4,DARK,'stroke="#facc15"')+R(fx-8,cy-22,16,6,'#111827',2,'stroke="#374151"');return wrap(g,'guarnizioni','')}
+function sae(){const cy=55;let g=R(0,cy-8,30,5,'#ef4444',2)+R(0,cy+3,30,5,'#1f2937',2)+R(30,cy-13,40,26,'#111827',8,'stroke="#374151"')+R(70,cy-9,14,6,MET,1)+R(70,cy+3,14,6,DARK,1,'stroke="#9ca3af"');
+  const fx=184;g+=R(fx-22,cy-14,44,28,'#111827',10,'stroke="#374151"')+R(fx-14,cy-4,10,8,MET,2)+R(fx+4,cy-4,10,8,DARK,2,'stroke="#9ca3af"');return wrap(g)}
+function cig(){const cy=55;let g=R(0,cy-3,20,6,'#111827',2,'stroke="#475569"')+R(20,cy-12,36,24,'#1f2937',5)+R(56,cy-9,40,18,'#374151',4)+R(96,cy-4,8,8,MET,2)+R(64,cy-12,14,3,MET)+R(64,cy+9,14,3,MET);
+  const fx=184;g+=Ci(fx,cy,18,'#1f2937')+Ci(fx,cy,4,MET)+R(fx-20,cy-2,6,4,MET)+R(fx+14,cy-2,6,4,MET);return wrap(g,'molle laterali = negativo','punta = positivo')}
+function banana(){const cy=55;let g=R(0,cy-3,22,6,'#ef4444',2)+R(22,cy-9,44,18,'#dc2626',5)+R(66,cy-3,30,6,MET,2);for(let i=0;i<3;i++)g+=P(`M${72+i*8} ${cy-3} Q${76+i*8} ${cy-6} ${80+i*8} ${cy-3}`,'none',`stroke="${MET}"`);
+  const fx=184;g+=Ci(fx,cy,14,'#dc2626')+Ci(fx,cy,4,MET);return wrap(g)}
+function ch(){const cy=55,fx=60;let g=P(`M${fx-24} ${cy-14} L${fx-10} ${cy-26} L${fx+10} ${cy-26} L${fx+24} ${cy-14} L${fx+24} ${cy+14} L${fx-24} ${cy+14} Z`,'#e5e7eb');
+  g+=Ci(fx-12,cy-4,3.5,'#6b7280')+Ci(fx+12,cy-4,3.5,'#6b7280')+Ci(fx,cy+6,3.5,'#6b7280');
+  const sx=184;g+=P(`M${sx-24} ${cy-10} L${sx-14} ${cy-22} L${sx+14} ${cy-22} L${sx+24} ${cy-10} L${sx+24} ${cy+18} L${sx-24} ${cy+18} Z`,'#f8fafc','stroke="#94a3b8"');
+  g+=R(sx-15,cy-6,6,6,DARK,3)+R(sx+9,cy-6,6,6,DARK,3)+R(sx-3,cy+4,6,6,DARK,3);return wrap(g,'spina T12/T13','presa')}
+function eu(){const cy=55;let g=Ci(56,cy,26,'#1f2937')+R(36,cy-3,40,6,'#1f2937')+Ci(44,cy,3,MET)+Ci(68,cy,3,MET)+R(52,cy-26,8,4,MET)+R(52,cy+22,8,4,MET);
+  const fx=184;g+=R(fx-26,cy-12,52,24,'#e5e7eb',10)+Ci(fx-14,cy,3,'#6b7280')+Ci(fx,cy,3,'#6b7280')+Ci(fx+14,cy,3,'#6b7280');return wrap(g,'Schuko (F)','italiana (L)')}
+function iec(){const cy=55;let g=R(0,cy-4,30,8,'#111827',3,'stroke="#475569"')+R(30,cy-14,50,28,'#111827',4,'stroke="#374151"');
+  const fx=184;g+=P(`M${fx-24} ${cy-16} L${fx+24} ${cy-16} L${fx+24} ${cy+6} L${fx+14} ${cy+16} L${fx-14} ${cy+16} L${fx-24} ${cy+6} Z`,'#111827','stroke="#475569"');
+  g+=R(fx-15,cy-6,4,10,MET)+R(fx+11,cy-6,4,10,MET)+R(fx-2,cy+4,4,10,MET);return wrap(g,'','C13 (3 contatti)')}
+function usbc(){const cy=55;let g=R(0,cy-3,30,6,'#111827',2,'stroke="#475569"')+R(30,cy-10,36,20,'#111827',6,'stroke="#374151"')+R(66,cy-5,22,10,MET,5);
+  const fx=184;g+=R(fx-24,cy-8,48,16,MET,8)+R(fx-18,cy-4,36,8,DARK,4)+R(fx-12,cy-1,24,2,'#475569');return wrap(g,'','reversibile')}
+function usba(){const cy=55;let g=R(0,cy-3,30,6,'#111827',2,'stroke="#475569"')+R(30,cy-11,36,22,'#111827',3,'stroke="#374151"')+R(66,cy-8,30,16,MET,1);
+  const fx=184;g+=R(fx-24,cy-10,48,20,MET,1)+R(fx-20,cy-6,40,12,DARK)+R(fx-20,cy-6,40,5,'#3b82f6');return wrap(g,'','lingua blu = USB 3')}
+function hdmi(){const cy=55;let g=R(0,cy-3,30,6,'#111827',2,'stroke="#475569"')+R(30,cy-12,36,24,'#111827',3,'stroke="#374151"')+R(66,cy-7,24,14,MET,1);
+  const fx=184;g+=P(`M${fx-26} ${cy-10} L${fx+26} ${cy-10} L${fx+26} ${cy+2} L${fx+18} ${cy+10} L${fx-18} ${cy+10} L${fx-26} ${cy+2} Z`,MET)+R(fx-20,cy-5,40,7,DARK);return wrap(g)}
+function rj45(){const cy=55;let g=R(0,cy-4,30,8,'#2563eb',3)+R(30,cy-12,50,24,'rgba(203,213,225,.3)',2,'stroke="#94a3b8"')+P(`M44 ${cy-12} L74 ${cy-24} L76 ${cy-21} L50 ${cy-12} Z`,'rgba(203,213,225,.5)');
+  for(let i=0;i<8;i++)g+=R(64+i*0,cy-10+i*2.6,14,1.2,['#f97316','#fdba74','#22c55e','#3b82f6','#93c5fd','#86efac','#a16207','#fde68a'][i]);
+  const fx=184;g+=R(fx-22,cy-14,44,28,'rgba(203,213,225,.3)',2,'stroke="#94a3b8"');for(let i=0;i<8;i++)g+=R(fx-18+i*4.8,cy-12,2.4,8,GOLD);g+=R(fx-8,cy+14,16,6,'rgba(203,213,225,.5)');return wrap(g,'linguetta di aggancio','8 contatti')}
+
+function pic(name){const n=name.replace(/‑/g,'-');
+  if(n==='XT30')return xt({s:.7,lab:'XT30'});
+  if(n==='XT60')return xt({s:.9,lab:'XT60'});
+  if(n==='XT90')return xt({s:1.1,lab:'XT90'});
+  if(n==='XT90-S')return xt({s:1.1,lab:'XT90-S',anti:1});
+  if(n==='XT150')return xt({s:1.25,lab:'XT150'});
+  if(n==='AS150')return xt({s:1.25,lab:'AS150',anti:1,sig:1});
+  if(n==='QS8')return xt({s:1.3,c:'#f97316',lab:'QS8',anti:1});
+  if(n==='EC3')return ec({s:.8});if(n==='EC5')return ec({s:1});if(n==='EC8')return ec({s:1.2});
+  if(n.startsWith('Deans'))return deans();if(n==='MR30')return mr30();
+  if(n==='Bullet 4 mm')return bullet({s:.8});if(n.startsWith('Bullet'))return bullet({s:1.2});
+  if(n==='Anderson Powerpole')return anderson();if(n.startsWith('Anderson SB'))return sb();
+  if(n==='MC4')return mc4();if(n.startsWith('Julet'))return julet();if(n.startsWith('XLR'))return xlr();
+  if(n.startsWith('GX'))return gx({n:4});if(n.startsWith('DC barrel'))return barrel();
+  if(n==='JST-XH')return jst({n:5,p:9});if(n==='JST-PH')return jst({n:2,p:7});
+  if(n.startsWith('JST-RCY'))return jst({n:2,p:9,c:'#dc2626'});if(n==='JST-SM')return jst({n:3,p:10});
+  if(n.startsWith('Dupont'))return dupont();if(n.startsWith('Morsetto'))return term();if(n.startsWith('Wago'))return wago();
+  if(n.startsWith('Faston'))return faston();if(n.startsWith('Capicorda'))return ring();if(n.startsWith('Deutsch'))return deutsch();
+  if(n.startsWith('Superseal'))return superseal();if(n.startsWith('SAE'))return sae();if(n.startsWith('Presa accendisigari'))return cig();
+  if(n.startsWith('Banana'))return banana();if(n.startsWith('Spina CH'))return ch();if(n.startsWith('Spina IT'))return eu();
+  if(n.startsWith('IEC'))return iec();if(n.startsWith('USB-C'))return usbc();if(n==='USB-A')return usba();
+  if(n.startsWith('HDMI'))return hdmi();if(n==='RJ45')return rj45();
+  return '';
+}
+
+let selCat='all';
+function renderCats(){
+  const box=$('cats');box.innerHTML='';
+  [['all',['Tutti','#22d3ee']],...Object.entries(CATS)].forEach(([k,[n]])=>{const b=document.createElement('button');b.textContent=n;b.className=k===selCat?'on':'';b.onclick=()=>{selCat=k;renderCats();renderGrid()};box.appendChild(b)});
+}
+function renderGrid(){
+  const q=$('q').value.toLowerCase().trim(),so=$('sort').value;
+  let list=C.filter(c=>(selCat==='all'||c[2].includes(selCat))&&(!q||(c[0]+' '+c[1]+' '+c[7]+' '+c[8]).toLowerCase().includes(q)));
+  const val=x=>x==null?-1:x;
+  list.sort((a,b)=>so==='amp'?val(a[3])-val(b[3]):so==='ampd'?val(b[3])-val(a[3]):so==='price'?(a[5]??999)-(b[5]??999):a[0].localeCompare(b[0]));
+  $('count').textContent=list.length+' connettori';
+  $('grid').innerHTML=list.map(c=>{const col=CATS[c[2][0]][1];
+    return `<div class="cc"><span class="stripe" style="background:${col}"></span><h4>${c[0]}</h4><div class="sub">${c[1]}</div><div class="pic">${pic(c[0])}</div>
+    <div class="specs">${c[3]!=null?`<span class="chip a">~${c[3]} A</span>`:''}${c[4]?`<span class="chip">${c[4]} V</span>`:''}${c[5]!=null?`<span class="chip p">~${c[5]} €</span>`:''}<span class="chip">${ICONC[c[6].split('/')[0].split(' ')[0]]||'•'} ${c[6]}</span></div>
+    <div class="more"><b>Dove si usa</b><div>${c[7]}</div><ul class="pro">${c[8].map(x=>'<li>'+x+'</li>').join('')}</ul><ul class="con">${c[9].map(x=>'<li>'+x+'</li>').join('')}</ul>${c[10]?'<div style="color:var(--muted)">💡 '+c[10]+'</div>':''}<div style="margin-top:6px">${c[2].map(k=>`<span class="chip" style="color:${CATS[k][1]}">${CATS[k][0]}</span>`).join(' ')}</div></div></div>`}).join('');
+  document.querySelectorAll('.cc').forEach(d=>d.onclick=()=>d.classList.toggle('open'));
+}
+$('q').oninput=renderGrid;$('sort').onchange=renderGrid;renderCats();renderGrid();
+
+// ===== anatomia
+(function(){const s=$('anat');
+  el('rect',{x:70,y:70,width:170,height:90,rx:12,fill:'#fbbf24'},s);
+  el('path',{d:'M70 70 L90 70 L70 92 Z',fill:'#0a0e14'},s);
+  el('rect',{x:240,y:88,width:60,height:16,rx:3,fill:'#d4a017'},s);el('rect',{x:240,y:126,width:60,height:16,rx:3,fill:'#d4a017'},s);
+  el('rect',{x:20,y:92,width:50,height:10,fill:'#ef4444'},s);el('rect',{x:20,y:128,width:50,height:10,fill:'#1f2937'},s);
+  el('text',{x:120,y:122,fill:'#0d1117','font-size':16,'font-weight':800},s,'XT');
+  const lab=(x1,y1,x2,y2,t)=>{el('line',{x1,y1,x2,y2,stroke:'#22d3ee','stroke-width':1.5},s);el('circle',{cx:x1,cy:y1,r:4,fill:'#22d3ee'},s);el('text',{x:x2+(x2>x1?6:-6),y:y2+4,fill:'#e8edf3','font-size':12,'text-anchor':x2>x1?'start':'end'},s,t)};
+  lab(80,76,60,30,'Smusso di polarizzazione');lab(160,160,160,205,'Guscio isolante (plastica resistente al calore)');
+  lab(290,96,400,60,'Contatti dorati (bassa resistenza)');lab(270,134,400,140,'Coppetta per il cavo');lab(30,97,20,30,'Cavo (sezione adeguata)');
+  el('text',{x:400,y:180,fill:'#9aa7b6','font-size':11},s,'Femmina = lato batteria (contatti protetti)');
+})();
+
+// ===== grafico correnti
+let chartCat='all';
+function chart(){
+  const s=$('chart');s.innerHTML='';
+  const list=C.filter(c=>c[3]!=null&&c[3]>=1&&(chartCat==='all'||c[2].includes(chartCat))).sort((a,b)=>b[3]-a[3]).slice(0,22);
+  const h=Math.max(160,list.length*17+50);s.setAttribute('viewBox',`0 0 560 ${h}`);
+  const x0=150,W=380,x=a=>x0+Math.log10(a)/Math.log10(200)*W;
+  [1,10,100].forEach(v=>{el('line',{x1:x(v),x2:x(v),y1:10,y2:h-28,stroke:'#2b3644'},s);el('text',{x:x(v),y:h-12,'text-anchor':'middle',fill:'#9aa7b6','font-size':11,'font-family':'JetBrains Mono'},s,v+' A')});
+  list.forEach((c,i)=>{const y=14+i*17;
+    el('text',{x:x0-8,y:y+10,'text-anchor':'end',fill:'#e8edf3','font-size':11},s,c[0]);
+    const r=el('rect',{x:x0,y,width:0,height:12,rx:3,fill:CATS[c[2][0]][1]},s);
+    el('text',{x:x(c[3])+5,y:y+10,fill:'#9aa7b6','font-size':10,'font-family':'JetBrains Mono',opacity:0,class:'lbl'},s,c[3]+' A');
+    setTimeout(()=>{r.style.transition='width .9s ease';r.setAttribute('width',Math.max(2,x(c[3])-x0))},40+i*35);
+  });
+  setTimeout(()=>s.querySelectorAll('.lbl').forEach(t=>{t.style.transition='opacity .4s';t.setAttribute('opacity',1)}),900);
+  const box=$('chartCats');box.innerHTML='';
+  [['all','Tutti'],...Object.entries(CATS).filter(([k])=>k!=='dati').map(([k,v])=>[k,v[0]])].forEach(([k,n])=>{const b=document.createElement('button');b.textContent=n;b.className=k===chartCat?'on':'';b.onclick=()=>{chartCat=k;chart()};box.appendChild(b)});
+}
+const chIO=new IntersectionObserver(es=>{if(es[0].isIntersecting){chart();chIO.disconnect()}},{threshold:.2});chIO.observe($('chart'));
+
+// ===== antiscintilla
+let asTimer;
+function antispark(anti){
+  clearInterval(asTimer);const s=$('asSvg');
+  document.getElementById('asNorm').classList.toggle('on',!anti);document.getElementById('asAnti').classList.toggle('on',anti);
+  $('asTxt').innerHTML=anti?'Il contatto passa prima attraverso il <b>resistore</b> (giallo): i condensatori del controller si caricano lentamente, poi si chiude il contatto principale. Nessun arco, contatti puliti per sempre.':'Al primo contatto i condensatori scarichi del controller assorbono un picco di centinaia di ampere: <b>arco</b>, schiocco e contatti che si anneriscono un po\' a ogni collegamento.';
+  let t=0;
+  const draw=()=>{s.innerHTML='';
+    const p=(Math.sin(t)+1)/2; const off=70*(1-Math.min(1,p*1.4));
+    el('rect',{x:20,y:70,width:120,height:80,rx:10,fill:'#334155'},s);el('text',{x:80,y:115,'text-anchor':'middle',fill:'#e8edf3','font-size':13,'font-weight':700},s,'Batteria 60 V');
+    el('rect',{x:420,y:70,width:120,height:80,rx:10,fill:'#334155'},s);el('text',{x:480,y:104,'text-anchor':'middle',fill:'#e8edf3','font-size':13,'font-weight':700},s,'Controller');
+    [0,1,2].forEach(i=>el('rect',{x:448+i*22,y:116,width:12,height:22,rx:2,fill:'#60a5fa'},s));
+    el('line',{x1:140,y1:110,x2:230,y2:110,stroke:'#ef4444','stroke-width':6},s);
+    el('rect',{x:200,y:90,width:50,height:40,rx:6,fill:'#f59e0b'},s);
+    if(anti)el('rect',{x:234,y:96,width:12,height:8,fill:'#fde047'},s);
+    const g=el('g',{transform:`translate(${off} 0)`},s);
+    el('rect',{x:262,y:90,width:50,height:40,rx:6,fill:'#fbbf24'},g);el('rect',{x:250,y:104,width:14,height:12,fill:'#d1d5db'},g);
+    el('line',{x1:312,y1:110,x2:420,y2:110,stroke:'#ef4444','stroke-width':6},s);
+    const touching=off<4;
+    if(touching){
+      if(!anti){ if(p>0.7&&p<0.95){el('circle',{cx:257,cy:110,r:22,fill:'#22d3ee',opacity:.5},s);el('path',{d:'M245 85 L262 105 L250 108 L268 135',stroke:'#e0f2fe','stroke-width':3,fill:'none'},s)}}
+      el('path',{d:'M140 110 L420 110',stroke:'#fbbf24','stroke-width':2,class:'flow',fill:'none'},s);
+    }
+    el('text',{x:280,y:190,'text-anchor':'middle',fill:'#9aa7b6','font-size':12},s,touching?(anti?'Precarica tramite resistore → contatto pieno':'Contatto: picco di corrente → ARCO'):'Inserimento…');
+    t+=0.06;
+  };
+  draw();asTimer=setInterval(draw,50);
+}
+$('asNorm').onclick=()=>antispark(false);$('asAnti').onclick=()=>antispark(true);antispark(false);
+
+// ===== selettore
+function wizard(){
+  const A=+$('wA').value||1,V=+$('wV').value||12,U=$('wU').value,W=$('wW').value==='1';
+  let cand=C.filter(c=>c[3]!=null&&c[2].includes(U)&&c[3]>=A*1.2&&(c[4]==null||c[4]>=V));
+  if(V>=36&&(U==='batt'||U==='rc')){const anti=cand.filter(c=>/S$|AS150|QS8|Anderson/.test(c[0]));if(anti.length)cand=anti}
+  if(W){const wp=cand.filter(c=>/MC4|Deutsch|Superseal|Julet|GX/.test(c[0]));if(wp.length)cand=wp}
+  cand.sort((a,b)=>a[3]-b[3]);cand=cand.slice(0,4);
+  let msg='';
+  if(V>=36&&(U==='batt'||U==='rc'))msg+='<div class="note"><b>Tensione ≥ 36 V</b>Ho dato priorità ai connettori antiscintilla o robusti contro gli archi.</div>';
+  if(W)msg+='<div class="note"><b>Ambiente umido</b>Ho dato priorità ai connettori sigillati. Se nessuno è adatto, proteggi il collegamento con guaina adesiva o una scatola IP65+.</div>';
+  if(U==='casa'&&V>50)msg+='<div class="warn"><b>⚠ Rete 230 V</b>Gli interventi sull\'impianto domestico in Svizzera richiedono un installatore autorizzato, salvo piccoli lavori consentiti ai privati. In caso di dubbio, rivolgiti a un elettricista.</div>';
+  $('wRes').innerHTML=msg+(cand.length?cand.map((c,i)=>`<div class="result"><h4>${i===0?'⭐ ':''}${c[0]} <span class="chip a">~${c[3]} A</span>${c[5]!=null?` <span class="chip p">~${c[5]} €</span>`:''}</h4><div class="pic">${pic(c[0])}</div><div style="font-size:.9rem">${c[7]}</div><div style="font-size:.85rem;color:var(--muted);margin-top:4px">${c[8][0]} · ${c[9][0]}</div></div>`).join(''):'<div class="result"><h4>Nessun connettore del catalogo adatto</h4><div style="font-size:.9rem">Prova un\'altra categoria d\'uso, oppure per correnti molto alte usa capicorda a occhiello su bulloni o connettori Anderson SB.</div></div>');
+}
+['wA','wV','wU','wW'].forEach(id=>{$(id).oninput=wizard;$(id).onchange=wizard});wizard();
+</script>
+</body>
+</html>

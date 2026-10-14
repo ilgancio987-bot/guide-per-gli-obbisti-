@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Manuale di Saldatura</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--paper:#151b24;--paper2:#1c2430;--ink:#e8edf3;--muted:#9aa7b6;--line:#2b3644;--accent:#fb923c;--accent2:#fbbf24;--ok:#36d399;--danger:#f87171;--blue:#60a5fa;--tin:#cbd5e1;--cu:#d97706;--pcb:#14532d}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 Inter,system-ui,sans-serif}
+a{color:var(--accent)}
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0;z-index:20}
+header.cover{min-height:90vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:40px 16px;background:radial-gradient(circle at 50% 35%,#3a1f0e 0,var(--bg) 62%)}
+.cover h1{font:800 clamp(2.2rem,8vw,4.6rem)/1.05 Inter;margin:.3em 0;letter-spacing:-.02em}
+.cover h1 span{color:var(--accent)}
+.cover .sub{font-family:Merriweather;font-style:italic;color:var(--muted);max-width:580px}
+.badge{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:4px 14px;font-size:.8rem;color:var(--muted);letter-spacing:.15em;text-transform:uppercase}
+.hero{width:min(340px,86vw);margin-top:26px}
+.spark{animation:spk .9s ease-out infinite}
+@keyframes spk{0%{opacity:1;transform:translate(0,0)}100%{opacity:0;transform:translate(var(--dx),var(--dy))}}
+.glow{animation:gl 1.4s ease-in-out infinite}@keyframes gl{50%{opacity:.4}}
+nav.toc{max-width:840px;margin:0 auto;padding:30px 16px}
+.toc ol{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.toc a{display:flex;gap:12px;align-items:center;padding:12px 16px;background:var(--paper);border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--ink);transition:.2s}
+.toc a:hover{border-color:var(--accent);transform:translateX(4px)}
+.toc .n{font:600 .8rem JetBrains Mono;color:var(--accent);min-width:28px}
+.toc .part{font:600 .7rem JetBrains Mono;color:var(--muted);letter-spacing:.2em;text-transform:uppercase;margin:14px 0 2px}
+main{max-width:840px;margin:0 auto;padding:0 16px 80px}
+section.chap{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 22px;margin:28px 0;opacity:0;transform:translateY(30px);transition:.7s}
+section.chap.in{opacity:1;transform:none}
+.kick{font:600 .75rem JetBrains Mono;color:var(--accent);letter-spacing:.2em;text-transform:uppercase}
+.chap h2{font:800 1.8rem/1.2 Inter;margin:.2em 0 .6em}
+.chap h3{font-size:1.15rem;margin:1.6em 0 .4em;color:var(--accent2)}
+.chap p,.chap li{font-family:Merriweather;font-size:.98rem}
+.note,.warn,.tip{border-radius:12px;padding:14px 16px;margin:16px 0;font-size:.95rem;border-left:4px solid}
+.note{background:#132235;border-color:var(--blue)}.warn{background:#2a1517;border-color:var(--danger)}.tip{background:#13261d;border-color:var(--ok)}
+.note b:first-child,.warn b:first-child,.tip b:first-child{display:block;margin-bottom:4px}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin:12px 0}
+th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em}
+td.v{font:600 .88rem JetBrains Mono;color:var(--accent2);white-space:nowrap}
+.tablewrap{overflow-x:auto}
+.mono{font-family:JetBrains Mono;font-size:.88em;background:var(--paper2);padding:1px 6px;border-radius:5px}
+.svgbox{background:#0a0e14;border:1px solid var(--line);border-radius:14px;padding:10px;margin:16px 0;overflow-x:auto}
+.svgbox svg{display:block;width:100%;height:auto;min-width:520px}
+.cap{font-size:.88rem;color:var(--muted);margin:-6px 0 14px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+button{background:var(--paper2);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:8px 16px;font:600 .85rem Inter;cursor:pointer}
+button.on{background:var(--accent);color:#0d1117;border-color:var(--accent)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:14px 0}
+.card{background:var(--paper2);border:1px solid var(--line);border-radius:12px;padding:14px}
+.card h4{margin:0 0 6px;font-size:1rem}
+.card p{font-size:.88rem;margin:0;color:var(--muted);font-family:Inter}
+.card .tag{font:600 .7rem JetBrains Mono;color:var(--accent);text-transform:uppercase;letter-spacing:.1em}
+.steptxt{min-height:70px;background:var(--paper2);border-radius:12px;padding:12px 14px;font-family:Merriweather;font-size:.95rem}
+.steptxt b{color:var(--accent)}
+.check li{list-style:none;display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.check ul{padding:0;margin:0}
+.check input{width:22px;height:22px;accent-color:var(--accent);flex:0 0 auto;margin-top:2px}
+.check li.done span{text-decoration:line-through;opacity:.5}
+.flow{stroke-dasharray:6 8;animation:flow .8s linear infinite}@keyframes flow{to{stroke-dashoffset:-28}}
+.tr{transition:all .7s ease}
+.footer{text-align:center;color:var(--muted);font-size:.8rem;padding:30px 16px 60px}
+dl{margin:0}dt{font-weight:700;color:var(--accent2);margin-top:12px}dd{margin:2px 0 0;font-family:Merriweather;font-size:.93rem}
+@media print{.progress,.btns{display:none}section.chap{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+
+<header class="cover">
+  <span class="badge">Manuale · Volume 3</span>
+  <h1>L'arte della<br><span>saldatura</span></h1>
+  <p class="sub">Stagno, circuiti, cavi, batterie a punti e uno sguardo alla saldatura dei metalli. Teoria, tecnica e pratica, con animazioni passo‑passo.</p>
+  <svg class="hero" viewBox="0 0 340 180">
+    <rect x="20" y="130" width="300" height="22" rx="4" fill="#14532d"/>
+    <rect x="150" y="124" width="40" height="8" rx="2" fill="#d97706"/>
+    <rect x="167" y="70" width="6" height="62" fill="#9ca3af"/>
+    <path d="M150 124 Q170 96 190 124 Z" fill="#cbd5e1"/>
+    <g transform="rotate(-38 210 60)"><rect x="200" y="0" width="16" height="120" rx="6" fill="#374151"/><rect x="204" y="110" width="8" height="40" fill="#9ca3af"/><path d="M204 150 L208 166 L212 150 Z" fill="#d1d5db"/></g>
+    <circle cx="186" cy="118" r="14" fill="#fb923c" opacity=".35" class="glow"/>
+    <g fill="#fbbf24">
+      <circle cx="186" cy="118" r="2" class="spark" style="--dx:-30px;--dy:-30px"/>
+      <circle cx="186" cy="118" r="2" class="spark" style="--dx:24px;--dy:-36px;animation-delay:.3s"/>
+      <circle cx="186" cy="118" r="1.6" class="spark" style="--dx:36px;--dy:-10px;animation-delay:.55s"/>
+      <circle cx="186" cy="118" r="1.6" class="spark" style="--dx:-38px;--dy:-6px;animation-delay:.15s"/>
+    </g>
+    <path d="M60 40 C 110 60, 130 90, 160 112" fill="none" stroke="#cbd5e1" stroke-width="4" stroke-linecap="round"/>
+  </svg>
+</header>
+
+<nav class="toc"><ol>
+  <li class="part">Parte I · Le basi</li>
+  <li><a href="#c1"><span class="n">01</span>Tre "saldature" diverse</a></li>
+  <li><a href="#c2"><span class="n">02</span>Sicurezza</a></li>
+  <li><a href="#c3"><span class="n">03</span>Attrezzatura e materiali</a></li>
+  <li class="part">Parte II · Lo stagno</li>
+  <li><a href="#c4"><span class="n">04</span>La tecnica base in 5 tempi</a></li>
+  <li><a href="#c5"><span class="n">05</span>Riconoscere un giunto buono</a></li>
+  <li><a href="#c6"><span class="n">06</span>Circuiti: componenti THT</a></li>
+  <li><a href="#c7"><span class="n">07</span>Circuiti: componenti SMD</a></li>
+  <li><a href="#c8"><span class="n">08</span>Cavi, giunzioni e connettori</a></li>
+  <li><a href="#c9"><span class="n">09</span>Dissaldare e riparare</a></li>
+  <li class="part">Parte III · Batterie</li>
+  <li><a href="#c10"><span class="n">10</span>Saldatura a punti delle celle</a></li>
+  <li><a href="#c11"><span class="n">11</span>Stagno sui pacchi batteria: dove sì, dove no</a></li>
+  <li class="part">Parte IV · Oltre</li>
+  <li><a href="#c12"><span class="n">12</span>Saldatura dei metalli: panoramica</a></li>
+  <li><a href="#c13"><span class="n">13</span>Programma di allenamento</a></li>
+  <li><a href="#c14"><span class="n">14</span>Problemi, soluzioni e glossario</a></li>
+</ol></nav>
+
+<main>
+
+<!-- 1 -->
+<section class="chap" id="c1">
+  <div class="kick">Capitolo 01</div>
+  <h2>Tre "saldature" diverse</h2>
+  <p>In italiano usiamo la stessa parola per tre processi che con le batterie e l'elettronica non hanno quasi niente in comune. Capire la differenza evita gli errori più gravi.</p>
+  <div class="cards">
+    <div class="card"><div class="tag">Elettronica · cavi</div><h4>Saldatura a stagno</h4><p>Tecnicamente è una <b>brasatura dolce</b>: i pezzi non fondono, lo stagno fuso (180–230 °C) li "incolla" metallicamente bagnandone la superficie.</p></div>
+    <div class="card"><div class="tag">Pacchi batteria</div><h4>Saldatura a punti</h4><p>Saldatura <b>a resistenza</b>: un impulso di corrente fortissimo (centinaia/migliaia di A per pochi millisecondi) fonde un puntino di lamella sul polo della cella. Calore brevissimo e localizzato.</p></div>
+    <div class="card"><div class="tag">Ferro · acciaio · alluminio</div><h4>Saldatura dei metalli</h4><p>Ad arco (elettrodo, MIG, TIG): i pezzi stessi <b>fondono</b> a 1.400 °C e oltre e diventano un unico pezzo. Per strutture e carpenteria.</p></div>
+  </div>
+  <div class="note"><b>Perché le celle non si saldano a stagno</b>Per far aderire lo stagno al fondello d'acciaio di una cella servono diversi secondi di calore intenso. Quel calore arriva alla guarnizione e al separatore interno: la cella perde capacità, può perdere elettrolito o, nel caso peggiore, andare in corto interno più avanti. La saldatura a punti scalda per pochi millisecondi e solo in un punto.</div>
+</section>
+
+<!-- 2 -->
+<section class="chap" id="c2">
+  <div class="kick">Capitolo 02</div>
+  <h2>Sicurezza</h2>
+  <div class="cards">
+    <div class="card"><h4>🔥 Ustioni</h4><p>La punta è a 300–400 °C. Rimetti <b>sempre</b> il saldatore nel suo supporto, mai appoggiato sul banco. Non riprendere al volo un saldatore che cade.</p></div>
+    <div class="card"><h4>💨 Fumi</h4><p>Il fumo che vedi è flussante bruciato, irritante per gola e polmoni. Lavora con finestra aperta o un aspiratore con filtro a carbone; non chinarti sopra il fumo.</p></div>
+    <div class="card"><h4>⚠️ Piombo</h4><p>Lo stagno al piombo non evapora alle temperature di saldatura, ma si deposita su mani e banco. Niente cibo durante il lavoro e <b>lavati le mani</b> dopo.</p></div>
+    <div class="card"><h4>👓 Occhi</h4><p>Lo stagno fuso e il flussante possono schizzare, soprattutto tagliando i reofori o con la saldatrice a punti. Occhiali sempre.</p></div>
+    <div class="card"><h4>⚡ Elettricità</h4><p>Mai saldare un circuito alimentato. Scollega e scarica i condensatori grandi (alimentatori!) prima di toccarli.</p></div>
+    <div class="card"><h4>🔋 Batterie</h4><p>Su un pacco carico ogni attrezzo di metallo è un potenziale corto. Copri ciò che non lavori, attrezzi isolati, sabbia o estintore vicini.</p></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="chap" id="c3">
+  <div class="kick">Capitolo 03</div>
+  <h2>Attrezzatura e materiali</h2>
+  <h3>Il saldatore</h3>
+  <p>Il saldatore "a matita" economico senza regolazione è la causa numero uno dei lavori brutti: troppo freddo sulle cose grandi, troppo caldo sulle piccole. Investi in una <b>stazione con temperatura regolabile</b> da almeno 60–80 W (o un saldatore portatile tipo T12/TS101/Pinecil). Per cavi grossi e connettori XT90 serve potenza vera: 80–100 W o più.</p>
+  <h3>Le punte</h3>
+  <div class="btns" id="tipBtns"></div>
+  <div class="svgbox"><svg id="tipSvg" viewBox="0 0 560 170"></svg></div>
+  <p class="cap" id="tipTxt"></p>
+  <h3>Lo stagno</h3>
+  <div class="svgbox"><svg id="alloySvg" viewBox="0 0 560 210"></svg></div>
+  <div class="tablewrap"><table>
+    <tr><th>Lega</th><th>Fonde a</th><th>Pro</th><th>Contro</th></tr>
+    <tr><td>Sn63Pb37 (eutettica)</td><td class="v">183 °C</td><td>Passa da solido a liquido di colpo, giunti lucidi, facilissima</td><td>Contiene piombo (vietata in prodotti in vendita nell'UE)</td></tr>
+    <tr><td>Sn60Pb40</td><td class="v">183–190 °C</td><td>Molto diffusa ed economica</td><td>Breve fase "pastosa": più rischio di giunti disturbati</td></tr>
+    <tr><td>SAC305 (senza piombo)</td><td class="v">217–220 °C</td><td>Senza piombo, standard industriale</td><td>Più difficile, serve più calore e flussante, giunti opachi</td></tr>
+  </table></div>
+  <p><b>Diametro:</b> 0,5–0,6 mm per SMD e componenti piccoli, 0,8 mm per uso generale, 1,0–1,5 mm per cavi grossi e connettori. Scegli stagno con <b>anima di flussante</b> (scritto "rosin core", "flux core", 1–3%).</p>
+  <h3>Il flussante</h3>
+  <p>Il flussante pulisce chimicamente le superfici dall'ossido e permette allo stagno di "bagnarle". Quello nello stagno basta per il lavoro normale; per SMD, rilavorazioni e cavi ossidati aggiungi <b>flussante in pasta o gel "no‑clean"</b>.</p>
+  <div class="warn"><b>⚠ Mai flussante acido in elettronica</b>Il flussante per idraulica (acido, a base di cloruro di zinco) corrode piste e fili nel giro di settimane. In elettronica e sui pacchi batteria si usa solo flussante a base di colofonia (rosin) o no‑clean.</div>
+  <h3>Il resto del banco</h3>
+  <div class="tablewrap"><table>
+    <tr><th>Attrezzo</th><th>A cosa serve</th></tr>
+    <tr><td>Lana d'ottone</td><td>Pulisce la punta senza raffreddarla (meglio della spugna bagnata)</td></tr>
+    <tr><td>Terza mano / morsa</td><td>Tiene fermi cavi e schede: servono due mani libere</td></tr>
+    <tr><td>Treccia dissaldante + pompetta</td><td>Togliere stagno (capitolo 09)</td></tr>
+    <tr><td>Tronchesino a taglio raso</td><td>Taglio dei reofori</td></tr>
+    <tr><td>Pinzette (anche in ceramica)</td><td>Componenti SMD, lavoro vicino a batterie</td></tr>
+    <tr><td>Pistola ad aria calda / stazione ad aria</td><td>Guaine termorestringenti, SMD</td></tr>
+    <tr><td>Lente o microscopio</td><td>Controllare i giunti piccoli</td></tr>
+    <tr><td>Alcool isopropilico + spazzolino</td><td>Pulire i residui di flussante</td></tr>
+    <tr><td>Ravvivante per punte (tip tinner)</td><td>Recuperare punte ossidate che non prendono stagno</td></tr>
+    <tr><td>Multimetro</td><td>Verificare continuità e cortocircuiti</td></tr>
+  </table></div>
+  <h3>Temperature di partenza</h3>
+  <div class="tablewrap"><table>
+    <tr><th>Lavoro</th><th>Con piombo</th><th>Senza piombo</th></tr>
+    <tr><td>SMD piccoli, componenti sensibili</td><td class="v">300–320 °C</td><td class="v">330–350 °C</td></tr>
+    <tr><td>Componenti THT, uso generale</td><td class="v">320–350 °C</td><td class="v">350–370 °C</td></tr>
+    <tr><td>Cavi AWG 14–18, piazzole grandi</td><td class="v">350–380 °C</td><td class="v">370–400 °C</td></tr>
+    <tr><td>Cavi AWG 8–12, XT60/XT90, lamelle di batteria</td><td class="v">380–420 °C</td><td class="v">400–430 °C</td></tr>
+  </table></div>
+  <div class="tip"><b>Regola d'oro</b>Il calore si trasmette più per <b>massa della punta</b> che per temperatura. Una punta grossa a 360 °C salda un cavo grosso meglio di una punta fina a 450 °C, e senza bruciare niente.</div>
+</section>
+
+<!-- 4 -->
+<section class="chap" id="c4">
+  <div class="kick">Capitolo 04</div>
+  <h2>La tecnica base in 5 tempi</h2>
+  <p>Ogni giunto a stagno, dal più piccolo al più grande, segue la stessa sequenza. Premi "Avanti" o "Riproduci" per vederla.</p>
+  <div class="btns"><button id="sPrev">◀ Indietro</button><button id="sNext" class="on">Avanti ▶</button><button id="sPlay">▶ Riproduci</button></div>
+  <div class="svgbox"><svg id="solderSvg" viewBox="0 0 560 300"></svg></div>
+  <div class="steptxt" id="solderTxt"></div>
+  <h3>Gli errori classici</h3>
+  <ul>
+    <li><b>Portare lo stagno sulla punta e poi sul giunto:</b> il flussante brucia sulla punta prima di arrivare, lo stagno si appoggia senza legare. Lo stagno va sul <i>pezzo caldo</i>, non sul saldatore.</li>
+    <li><b>Muovere il pezzo mentre si raffredda:</b> giunto "disturbato", granuloso e fragile.</li>
+    <li><b>Tenere la punta troppo a lungo:</b> piazzole che si staccano, componenti cotti, flussante esaurito.</li>
+    <li><b>Punta sporca o non stagnata:</b> trasferisce pochissimo calore. Una punta sana è sempre lucida.</li>
+  </ul>
+  <div class="tip"><b>Il "ponte di stagno"</b>Una goccina di stagno fresco tra punta e pezzo (aggiunta nel primo istante) moltiplica il contatto termico. È il trucco che rende facile il passo 1.</div>
+</section>
+
+<!-- 5 -->
+<section class="chap" id="c5">
+  <div class="kick">Capitolo 05</div>
+  <h2>Riconoscere un giunto buono</h2>
+  <p>Ecco la sezione di un giunto su una piazzola passante. Confronta il giunto corretto con i difetti più comuni.</p>
+  <div class="btns" id="jBtns"></div>
+  <div class="svgbox"><svg id="jointSvg" viewBox="0 0 560 240"></svg></div>
+  <div class="steptxt" id="jointTxt"></div>
+</section>
+
+<!-- 6 -->
+<section class="chap" id="c6">
+  <div class="kick">Capitolo 06</div>
+  <h2>Circuiti: componenti THT</h2>
+  <p>THT (Through‑Hole Technology) sono i componenti con i "piedini" che attraversano la scheda: resistenze, diodi, condensatori elettrolitici, connettori.</p>
+  <ol>
+    <li><b>Ordine di montaggio:</b> dal componente più basso al più alto (resistenze e diodi, poi zoccoli, poi condensatori, infine connettori). Così la scheda resta appoggiata in piano mentre lavori.</li>
+    <li><b>Polarità:</b> diodi (riga = catodo), LED (gamba lunga = +, lato piatto = −), elettrolitici (striscia = −), integrati (tacca o punto = pin 1). Controlla prima di saldare: dissaldare è sempre più difficile.</li>
+    <li><b>Inserisci e piega leggermente</b> i reofori a 30–45° dal lato saldature, così il pezzo non cade quando giri la scheda.</li>
+    <li><b>Salda</b> con i 5 tempi: punta che tocca piazzola e reoforo insieme, 2–3 secondi in tutto.</li>
+    <li><b>Taglia</b> i reofori appena sopra il giunto con il tronchesino a taglio raso, tenendo il pezzo tagliato (vola via!).</li>
+    <li><b>Controlla</b> con la lente: forma a cono, nessun ponte con le piazzole vicine.</li>
+  </ol>
+  <div class="tip"><b>Componenti con tanti piedini</b>Salda prima due piedini agli angoli opposti, controlla che il componente sia ben appoggiato e dritto, poi salda tutti gli altri. Se è storto, basta riscaldare uno dei due giunti per raddrizzarlo.</div>
+  <div class="note"><b>Componenti sensibili al calore</b>Transistor, LED e piccoli sensori: lavora veloce e, se servono più tentativi, aspetta qualche secondo tra uno e l'altro. Una pinza a becchi sul reoforo tra giunto e corpo fa da dissipatore.</div>
+</section>
+
+<!-- 7 -->
+<section class="chap" id="c7">
+  <div class="kick">Capitolo 07</div>
+  <h2>Circuiti: componenti SMD</h2>
+  <p>I componenti SMD (a montaggio superficiale) si appoggiano sopra le piazzole. Sembrano difficili, ma con flussante e pinzette sono più veloci dei THT.</p>
+  <h3>Componenti a 2 terminali (resistenze, condensatori 0805/1206)</h3>
+  <ol>
+    <li>Stagna leggermente <b>una sola</b> piazzola.</li>
+    <li>Con la pinzetta appoggia il componente, riscalda quella piazzola: il componente "affonda" nello stagno. Togli la punta e tieni fermo finché si solidifica.</li>
+    <li>Salda l'altro lato normalmente.</li>
+    <li>Ritocca il primo lato con un velo di flussante se serve.</li>
+  </ol>
+  <h3>Integrati a molti piedini (SOIC, TQFP): la "saldatura a trascinamento"</h3>
+  <ol>
+    <li>Allinea il chip perfettamente e fissa due piedini in angoli opposti.</li>
+    <li>Metti <b>abbondante flussante</b> su tutta la fila di piedini.</li>
+    <li>Carica un po' di stagno sulla punta (meglio a "zoccolo di cavallo" o a coltello) e trascinala lentamente lungo i piedini: il flussante e la tensione superficiale fanno sì che lo stagno resti sui piedini e non tra di essi.</li>
+    <li>Se si forma un ponte: altro flussante e ripassa, oppure treccia dissaldante.</li>
+    <li>Pulisci con alcool isopropilico e controlla con la lente.</li>
+  </ol>
+  <h3>Aria calda</h3>
+  <p>La stazione ad aria calda (300–350 °C, flusso medio) scioglie tutte le piazzole insieme: indispensabile per dissaldare integrati e per i componenti con piazzola sotto il corpo. Muovi l'ugello in cerchio per scaldare in modo uniforme e proteggi i componenti in plastica vicini con nastro Kapton.</p>
+</section>
+
+<!-- 8 -->
+<section class="chap" id="c8">
+  <div class="kick">Capitolo 08</div>
+  <h2>Cavi, giunzioni e connettori</h2>
+  <h3>Stagnare un cavo</h3>
+  <p>Spela il giusto (5–8 mm per cavi piccoli, la profondità della coppetta per i connettori), attorciglia i fili, scalda il cavo da sotto e porta lo stagno da sopra: lo stagno deve <b>risucchiarsi dentro</b> i fili per capillarità. Non deve formare una goccia esterna e non deve risalire troppo sotto la guaina, se no il cavo diventa rigido e si spezza in quel punto.</p>
+  <h3>Giunzione in linea con guaina termorestringente</h3>
+  <div class="btns"><button id="hsPlay" class="on">▶ Anima la giunzione</button></div>
+  <div class="svgbox"><svg id="spliceSvg" viewBox="0 0 560 190"></svg></div>
+  <div class="steptxt" id="spliceTxt">Premi "Anima la giunzione".</div>
+  <div class="warn"><b>⚠ L'errore più comune</b>Dimenticare di infilare la guaina <b>prima</b> di saldare. Infilala subito, e lontano dal giunto, così il calore non la fa restringere troppo presto.</div>
+  <h3>Connettori di potenza (XT60, XT90, Anderson)</h3>
+  <ol>
+    <li>Tieni il connettore <b>accoppiato</b> con il suo maschio/femmina durante la saldatura: se la plastica si ammorbidisce, i contatti restano allineati.</li>
+    <li>Blocca il connettore in morsa, coppetta rivolta verso l'alto.</li>
+    <li>Riempi la coppetta di stagno, poi immergi il cavo già stagnato mentre la tieni fusa.</li>
+    <li>Tieni fermo il cavo finché lo stagno torna opaco/solido (5–10 s).</li>
+    <li>Un polo alla volta, aspettando che il connettore si raffreddi tra uno e l'altro.</li>
+    <li>Guaina termorestringente su ogni polo. Controlla la polarità (spesso: lato smussato = positivo, ma verifica sul tuo sistema).</li>
+  </ol>
+  <div class="note"><b>Cavi molto grossi (AWG 8–10)</b>Servono punta grossa a scalpello, 400+ °C e un saldatore da almeno 80–100 W. Se lo stagno impiega più di 5–6 secondi a fondere, il saldatore non ha abbastanza potenza: il calore si disperde nel rame e scioglie la guaina del cavo prima di saldare.</div>
+  <h3>Saldare o crimpare?</h3>
+  <p>Nei veicoli che vibrano, un cavo saldato e poi lasciato libero tende a spezzarsi proprio dove finisce lo stagno. Soluzione: dopo la saldatura, <b>sostieni il cavo</b> con guaina doppia o fascetta, in modo che la flessione non avvenga sul giunto. I capicorda grandi (occhielli per bulloni) vanno <b>crimpati</b> con la pinza giusta, non saldati.</p>
+</section>
+
+<!-- 9 -->
+<section class="chap" id="c9">
+  <div class="kick">Capitolo 09</div>
+  <h2>Dissaldare e riparare</h2>
+  <div class="cards">
+    <div class="card"><div class="tag">Il più preciso</div><h4>Treccia dissaldante</h4><p>Appoggia la treccia sul giunto, premi sopra con la punta: lo stagno fuso viene assorbito dal rame. Taglia il pezzo usato. Un po' di flussante sulla treccia la rende molto più efficace.</p></div>
+    <div class="card"><div class="tag">Fori passanti</div><h4>Pompetta dissaldante</h4><p>Arma la pompetta, fondi il giunto, appoggia l'ugello e premi il pulsante: aspira lo stagno dal foro. Ottima per liberare i fori dei componenti THT.</p></div>
+    <div class="card"><div class="tag">Tanti piedini</div><h4>Aria calda</h4><p>Scalda uniformemente finché tutto lo stagno è fuso, poi solleva il componente con la pinzetta. Non forzare mai: se resiste, non è ancora tutto fuso.</p></div>
+  </div>
+  <div class="tip"><b>Il trucco controintuitivo</b>Un giunto vecchio che non vuole sciogliersi? <b>Aggiungi stagno fresco</b>. Lo stagno nuovo porta flussante e massa termica: tutto fonde prima, e poi lo togli con la treccia.</div>
+  <h3>Piazzola sollevata o pista interrotta</h3>
+  <p>Gratta delicatamente la vernice verde dalla pista fino al rame lucido, stagnala e salda un filo sottile (filo da wrapping o un reoforo tagliato) tra la pista e il piedino del componente. Fissa il filo con una goccia di colla o vernice.</p>
+</section>
+
+<!-- 10 -->
+<section class="chap" id="c10">
+  <div class="kick">Capitolo 10</div>
+  <h2>Saldatura a punti delle celle</h2>
+  <p>La saldatrice a punti spinge un impulso enorme di corrente attraverso la lamella e il polo della cella. Il punto di massima resistenza è il contatto tra lamella e cella: lì il metallo fonde in un piccolo "nocciolo" e i due pezzi diventano uno.</p>
+  <div class="btns"><button id="swPlay" class="on">⚡ Esegui un punto</button></div>
+  <div class="svgbox"><svg id="swSvg" viewBox="0 0 560 260"></svg></div>
+  <div class="steptxt" id="swTxt">Premi "Esegui un punto".</div>
+
+  <h3>Tipi di saldatrice</h3>
+  <div class="tablewrap"><table>
+    <tr><th>Tipo</th><th>Come funziona</th><th>Adatta a</th></tr>
+    <tr><td>A condensatori / a batteria al litio dedicata (tipo kWeld, Malectrics, "glitter")</td><td>Accumula energia e la scarica in un impulso controllato e ripetibile</td><td>La scelta giusta per pacchi seri, anche rame nichelato (i modelli potenti)</td></tr>
+    <tr><td>Portatili economiche "a penna" con batteria integrata</td><td>Impulso da batteria interna, poco controllato</td><td>Nichel 0,10–0,15 mm, piccoli pacchi; risultati variabili</td></tr>
+    <tr><td>A trasformatore da banco (es. 709A, 737G)</td><td>Impulso a frequenza di rete</td><td>Nichel sottile; le versioni economiche hanno poca potenza</td></tr>
+    <tr><td>Autocostruite da trasformatore di microonde</td><td>—</td><td><b>Sconsigliate</b>: tensioni di rete pericolose all'interno e impulso poco controllabile</td></tr>
+  </table></div>
+
+  <h3>Regolazioni indicative</h3>
+  <div class="tablewrap"><table>
+    <tr><th>Lamella</th><th>Spessore</th><th>Energia indicativa*</th><th>Note</th></tr>
+    <tr><td>Nichel puro</td><td>0,10 mm</td><td class="v">bassa</td><td>Facile, ma porta poca corrente (≈ 3–5 A per striscia da 8 mm)</td></tr>
+    <tr><td>Nichel puro</td><td>0,15 mm</td><td class="v">media</td><td>Standard per molti pacchi bici</td></tr>
+    <tr><td>Nichel puro</td><td>0,20 mm</td><td class="v">medio‑alta</td><td>Serve una saldatrice potente</td></tr>
+    <tr><td>Rame nichelato / sandwich rame+nichel</td><td>0,10–0,20 mm</td><td class="v">alta</td><td>Ottimo per correnti alte, richiede impulsi molto forti o la tecnica "a sandwich" con fessure</td></tr>
+  </table></div>
+  <p class="cap">* Ogni saldatrice usa una scala diversa (joule, millisecondi, livelli). Trova sempre il valore giusto con le prove su celle di scarto.</p>
+
+  <h3>La tecnica corretta</h3>
+  <ol>
+    <li><b>Prova prima:</b> su una cella morta o un fondello di scarto, parti basso e sali finché il punto regge.</li>
+    <li><b>Test di strappo:</b> prendi la lamella con la pinza e tira forte. Punto giusto = si strappa la lamella lasciando un "bottoncino" attaccato alla cella. Se la lamella si stacca pulita, l'energia è troppo bassa.</li>
+    <li><b>Elettrodi:</b> distanza 2–4 mm tra le punte, entrambe perpendicolari e a contatto completo con la lamella.</li>
+    <li><b>Pressione:</b> decisa e uguale sui due elettrodi. Poca pressione = scintille e buchi; troppa = punto debole.</li>
+    <li><b>Due punti doppi per cella</b> su ogni lamella (cioè 2 impulsi = 4 puntini), non dieci: ogni punto in più è calore in più nella cella.</li>
+    <li><b>Punte pulite:</b> limale con carta abrasiva fine quando si anneriscono, mantienile appuntite e arrotondate.</li>
+    <li><b>Polo positivo con delicatezza:</b> sotto il cappellotto ci sono la valvola di sfiato e il dispositivo di protezione (CID). Salda sul bordo piatto del cappellotto, non al centro.</li>
+  </ol>
+  <h3>Come leggere i punti</h3>
+  <div class="tablewrap"><table>
+    <tr><th>Aspetto</th><th>Significato</th><th>Correzione</th></tr>
+    <tr><td>Due puntini tondi, leggermente infossati, alone azzurro/dorato</td><td>✅ Punto corretto</td><td>—</td></tr>
+    <tr><td>Puntini appena segnati, la lamella si stacca</td><td>Energia insufficiente o poca pressione</td><td>Alza l'energia di un passo, premi di più</td></tr>
+    <tr><td>Buco nella lamella, scintille, schizzi</td><td>Energia troppo alta o elettrodo non a contatto pieno</td><td>Abbassa, appoggia bene entrambe le punte</td></tr>
+    <tr><td>Segno scuro/bruciato sul polo della cella</td><td>Troppa energia sulla cella</td><td>Abbassa subito e controlla quella cella</td></tr>
+  </table></div>
+  <div class="warn"><b>⚠ Se buchi il fondello</b>Un buco nel fondo della cella (polo negativo) significa che l'involucro è compromesso. Quella cella va scartata e smaltita, anche se sembra funzionare.</div>
+</section>
+
+<!-- 11 -->
+<section class="chap" id="c11">
+  <div class="kick">Capitolo 11</div>
+  <h2>Stagno sui pacchi batteria: dove sì, dove no</h2>
+  <div class="tablewrap"><table>
+    <tr><th>Cosa</th><th>Stagno?</th><th>Come</th></tr>
+    <tr><td>Polo della cella</td><td style="color:var(--danger);font-weight:700">MAI</td><td>Solo saldatura a punti</td></tr>
+    <tr><td>Fili di bilanciamento sulla lamella</td><td style="color:var(--ok);font-weight:700">Sì</td><td>Pre‑stagna la lamella <i>prima</i> di saldarla a punti sul pacco, oppure salda sulla lamella in un punto lontano dalla cella, velocemente, con punta grossa calda (≈ 380 °C, 2 s)</td></tr>
+    <tr><td>Cavi di potenza sulla lamella</td><td style="color:var(--accent2);font-weight:700">Meglio di no</td><td>Preferisci una linguetta di lamella che esce dal pacco, saldata al cavo lontano dalle celle; oppure cavo appiattito e saldato a punti con lamella sopra (sandwich)</td></tr>
+    <tr><td>Piazzole del BMS</td><td style="color:var(--ok);font-weight:700">Sì</td><td>Piazzole grandi: serve punta grossa e potenza. Stagna prima la piazzola, poi il cavo, poi uniscili</td></tr>
+    <tr><td>Connettori XT, fusibile</td><td style="color:var(--ok);font-weight:700">Sì</td><td>Capitolo 08, lontano dal pacco o con il pacco ben protetto</td></tr>
+  </table></div>
+  <div class="tip"><b>Sequenza consigliata per i fili di bilanciamento</b>1) Taglia le lamelle. 2) Sul banco, lontano dalle celle, stagna una piccola zona in ogni lamella dove andrà un filo. 3) Saldale a punti sul pacco. 4) Ora basta appoggiare il filo stagnato e toccare per un secondo: lo stagno è già lì, il calore che arriva alla cella è minimo.</div>
+  <div class="note"><b>Collegamenti con il Volume 1 e 2</b>Lo schema dei 17 fili di bilanciamento è nel Volume 1, capitolo 05. La loro verifica prima di collegare il BMS è nel Volume 1, capitolo 07, e nel Volume 2.</div>
+</section>
+
+<!-- 12 -->
+<section class="chap" id="c12">
+  <div class="kick">Capitolo 12</div>
+  <h2>Saldatura dei metalli: panoramica</h2>
+  <p>Per costruire un supporto in acciaio, un telaio o una scatola per batterie, si usa la saldatura ad arco: un arco elettrico a migliaia di gradi fonde i bordi dei pezzi insieme a un materiale d'apporto.</p>
+  <div class="cards">
+    <div class="card"><div class="tag">Il più economico</div><h4>Elettrodo (MMA / SMAW)</h4><p>Bacchetta rivestita che fonde e fa da apporto. Funziona all'aperto e su metallo un po' sporco. Lascia scoria da togliere. Ottimo per acciaio spesso, più difficile su lamiera sottile.</p></div>
+    <div class="card"><div class="tag">Il più facile</div><h4>MIG/MAG (filo continuo)</h4><p>Il filo esce dalla torcia premendo il grilletto, protetto da gas (o filo animato senza gas). Veloce e facile da imparare: il preferito per carpenteria e lamiere.</p></div>
+    <div class="card"><div class="tag">Il più preciso</div><h4>TIG</h4><p>Elettrodo di tungsteno che non si consuma, apporto aggiunto a mano, gas argon. Lavori bellissimi su acciaio inox e alluminio, ma richiede molta pratica.</p></div>
+  </div>
+  <div class="warn"><b>⚠ Sicurezza specifica dell'arco</b>L'arco emette raggi UV che bruciano gli occhi ("colpo d'arco") e la pelle in pochi secondi: serve una <b>maschera auto‑oscurante</b> (grado 9–13), guanti in pelle, maniche lunghe in cotone o pelle (il sintetico fonde) e nessun materiale infiammabile entro alcuni metri. Non saldare mai su contenitori che hanno contenuto carburanti o solventi, né su metallo zincato senza aspirazione (i fumi di zinco sono tossici). Tieni le batterie al litio lontane dalle scintille.</div>
+  <p>Per iniziare: un corso pratico di qualche serata (scuole professionali, centri di formazione) vale più di mesi da autodidatta, soprattutto per imparare a leggere la penetrazione del cordone.</p>
+</section>
+
+<!-- 13 -->
+<section class="chap" id="c13">
+  <div class="kick">Capitolo 13</div>
+  <h2>Programma di allenamento</h2>
+  <p>Fai questi esercizi nell'ordine, prima di lavorare sulla batteria vera. Spunta quelli completati.</p>
+  <div class="check"><ul id="trainList"></ul></div>
+</section>
+
+<!-- 14 -->
+<section class="chap" id="c14">
+  <div class="kick">Capitolo 14</div>
+  <h2>Problemi, soluzioni e glossario</h2>
+  <div class="tablewrap"><table>
+    <tr><th>Problema</th><th>Causa</th><th>Soluzione</th></tr>
+    <tr><td>Lo stagno fa una pallina e non aderisce</td><td>Superficie sporca/ossidata o non abbastanza calda</td><td>Pulisci, aggiungi flussante, scalda pezzo e piazzola insieme</td></tr>
+    <tr><td>La punta non prende stagno (diventa nera)</td><td>Punta ossidata, lasciata calda senza stagno</td><td>Ravvivante per punte; dopo ogni sessione lasciala ricoperta di stagno</td></tr>
+    <tr><td>Lo stagno impiega molto a fondere</td><td>Punta troppo piccola, saldatore poco potente</td><td>Punta più grossa, ponte di stagno, saldatore più potente</td></tr>
+    <tr><td>Giunto opaco e granuloso (con piombo)</td><td>Pezzo mosso durante il raffreddamento o giunto freddo</td><td>Riscalda con un po' di flussante e lascia fermo</td></tr>
+    <tr><td>Ponti tra piedini</td><td>Troppo stagno, poco flussante</td><td>Flussante e ripassa la punta pulita, oppure treccia</td></tr>
+    <tr><td>Guaina del cavo sciolta</td><td>Troppo tempo di contatto</td><td>Più potenza, meno tempo; stagna il cavo prima</td></tr>
+    <tr><td>Saldatrice a punti: punti deboli</td><td>Energia bassa, punte sporche, poca pressione</td><td>Pulisci le punte, aumenta energia, premi di più</td></tr>
+    <tr><td>Saldatrice a punti: scintille e buchi</td><td>Energia alta o contatto parziale</td><td>Abbassa, appoggia bene entrambe le punte</td></tr>
+  </table></div>
+  <h3>Glossario</h3>
+  <dl>
+    <dt>Bagnatura (wetting)</dt><dd>La capacità dello stagno di spandersi e legarsi a una superficie. Un giunto ben bagnato ha i bordi sottili e sfumati.</dd>
+    <dt>Flussante</dt><dd>Sostanza che rimuove gli ossidi e aiuta lo stagno a bagnare.</dd>
+    <dt>Giunto freddo</dt><dd>Giunto in cui lo stagno non si è legato bene a uno dei due pezzi: aspetto opaco, a pallina, contatto incerto.</dd>
+    <dt>Lega eutettica</dt><dd>Lega che passa da solida a liquida a una sola temperatura (Sn63Pb37 a 183 °C), senza fase pastosa.</dd>
+    <dt>Piazzola (pad)</dt><dd>La zona di rame sul circuito dove si salda un terminale.</dd>
+    <dt>Reoforo</dt><dd>Il "piedino" metallico di un componente.</dd>
+    <dt>THT / SMD</dt><dd>Componenti a foro passante / a montaggio superficiale.</dd>
+    <dt>Nocciolo (nugget)</dt><dd>La zona di metallo fuso e risolidificato in un punto di saldatura a resistenza.</dd>
+    <dt>CID</dt><dd>Dispositivo di interruzione corrente sotto il polo positivo delle celle cilindriche: da non surriscaldare.</dd>
+    <dt>AWG</dt><dd>Scala americana dei cavi: numero più basso = cavo più grosso.</dd>
+  </dl>
+</section>
+
+</main>
+<div class="footer">Manuale di saldatura · Volume 3 della serie batteria 60V 16S6P<br>Le temperature e le regolazioni sono valori di partenza: verifica sempre con prove pratiche e con le istruzioni dei tuoi strumenti.</div>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.05});
+document.querySelectorAll('.chap').forEach(s=>io.observe(s));
+addEventListener('scroll',()=>{const h=document.documentElement;document.getElementById('prog').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%'});
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const NS='http://www.w3.org/2000/svg';
+function el(t,a,p,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;if(p)p.appendChild(e);return e}
+const $=id=>document.getElementById(id);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+// ===== punte
+const tips={
+  'Conica':['M0 0 L18 0 L11 60 L7 60 Z','Punta fine e tonda. Va bene per lavori di precisione, ma trasferisce poco calore: <b>non</b> è la punta universale che sembra.'],
+  'Scalpello':['M0 0 L18 0 L16 54 L2 54 Z','La più versatile. Faccia piatta larga: ottimo contatto termico. Piccola (1,6–2,4 mm) per elettronica, grande (3–5 mm) per cavi e lamelle.'],
+  'Smussata (bevel)':['M0 0 L18 0 L18 40 L0 62 Z','Taglio obliquo che fa da piccola "coppetta" di stagno: perfetta per la saldatura a trascinamento dei piedini SMD e per piazzole grandi.'],
+  'Coltello':['M0 0 L18 0 L10 62 L8 62 Z','Lama sottile: ottima per trascinamento, file di piedini e lavori di rilavorazione.']
+};
+let tipSel='Scalpello';
+function drawTip(){
+  const s=$('tipSvg');s.innerHTML='';
+  el('rect',{x:40,y:70,width:250,height:30,rx:12,fill:'#374151'},s);
+  el('rect',{x:290,y:76,width:110,height:18,fill:'#9ca3af'},s);
+  const g=el('g',{transform:'translate(400 76) rotate(-90 9 9) translate(0 9)'},s);
+  const path=el('path',{d:tips[tipSel][0],fill:'#d1d5db'},g);
+  el('circle',{cx:470,cy:85,r:22,fill:'#fb923c',opacity:.25,class:'glow'},s);
+  el('text',{x:150,y:130,fill:'#9aa7b6','font-size':12,'text-anchor':'middle'},s,'impugnatura');
+  el('text',{x:440,y:140,fill:'#fbbf24','font-size':13,'font-weight':700,'text-anchor':'middle'},s,tipSel);
+  $('tipTxt').innerHTML=tips[tipSel][1];
+  document.querySelectorAll('#tipBtns button').forEach(b=>b.classList.toggle('on',b.textContent===tipSel));
+}
+Object.keys(tips).forEach(k=>{const b=document.createElement('button');b.textContent=k;b.onclick=()=>{tipSel=k;drawTip()};$('tipBtns').appendChild(b)});
+drawTip();
+
+// ===== leghe
+(function(){const s=$('alloySvg');
+  const x=t=>60+(t-150)*4.4;
+  el('line',{x1:60,x2:530,y1:170,y2:170,stroke:'#2b3644'},s);
+  [150,200,250].forEach(t=>{el('line',{x1:x(t),x2:x(t),y1:166,y2:174,stroke:'#9aa7b6'},s);el('text',{x:x(t),y:190,'text-anchor':'middle',fill:'#9aa7b6','font-size':11,'font-family':'JetBrains Mono'},s,t+' °C')});
+  [['Sn63Pb37',183,183,'#36d399',40],['Sn60Pb40',183,190,'#60a5fa',80],['SAC305 (no piombo)',217,220,'#fb923c',120]].forEach(([n,a,b,c,y])=>{
+    const r=el('rect',{x:60,y,width:0,height:22,rx:5,fill:c,opacity:.85},s);
+    el('rect',{x:x(a),y:y-4,width:Math.max(4,x(b)-x(a)),height:30,fill:'#fbbf24'},s);
+    el('text',{x:66,y:y+15,fill:'#0d1117','font-size':12,'font-weight':700},s,n);
+    setTimeout(()=>{r.style.transition='width 1.2s ease';r.setAttribute('width',x(a)-60)},300);
+  });
+  el('text',{x:60,y:22,fill:'#9aa7b6','font-size':12},s,'Barra = solido · tratto giallo = zona di fusione');
+})();
+
+// ===== tecnica 5 tempi
+const sSteps=[
+  ['Preparazione','<b>Punta pulita e stagnata</b>, pezzi puliti e fermi. Il reoforo attraversa la piazzola di rame.'],
+  ['1 · Scalda','Appoggia la punta in modo che tocchi <b>contemporaneamente piazzola e reoforo</b>. Conta 1–2 secondi.'],
+  ['2 · Aggiungi stagno','Porta il filo di stagno sul lato <b>opposto</b> alla punta, sul pezzo caldo: deve fondere a contatto con il pezzo, non con il saldatore.'],
+  ['3 · Togli lo stagno','Quando lo stagno ha avvolto reoforo e piazzola (di solito 1 secondo), allontana il filo.'],
+  ['4 · Togli la punta','Un attimo dopo, solleva la punta con un movimento deciso verso l\'alto, lungo il reoforo.'],
+  ['5 · Non muovere','Lascia raffreddare 2–3 secondi <b>senza toccare nulla</b>. Risultato: un cono lucido e concavo. Tempo totale: 2–4 secondi.']
+];
+let sI=0,playing=false;
+function drawSolder(){
+  const s=$('solderSvg');s.innerHTML='';
+  el('rect',{x:60,y:200,width:440,height:34,fill:'#14532d'},s);
+  el('text',{x:80,y:252,fill:'#9aa7b6','font-size':11},s,'circuito stampato');
+  el('rect',{x:220,y:192,width:120,height:10,rx:2,fill:'#d97706'},s);
+  el('rect',{x:220,y:232,width:120,height:6,fill:'#d97706',opacity:.6},s);
+  el('rect',{x:276,y:120,width:8,height:150,fill:'#9ca3af'},s);
+  el('text',{x:292,y:135,fill:'#9aa7b6','font-size':11},s,'reoforo');
+  el('text',{x:345,y:200,fill:'#d97706','font-size':11},s,'piazzola');
+  // heat glow
+  const heat=el('ellipse',{cx:280,cy:196,rx:70,ry:22,fill:'#fb923c',opacity:0,class:'tr'},s);
+  // fillet
+  const fil=el('path',{d:'M222 192 Q280 192 284 192 L276 192 Q280 192 338 192 Z',fill:'#cbd5e1',class:'tr'},s);
+  // iron
+  const iron=el('g',{class:'tr'},s);
+  el('rect',{x:0,y:-12,width:150,height:24,rx:10,fill:'#374151'},iron);
+  el('rect',{x:150,y:-6,width:50,height:12,fill:'#9ca3af'},iron);
+  el('path',{d:'M200 -6 L222 -2 L222 2 L200 6 Z',fill:'#d1d5db'},iron);
+  // solder wire
+  const wire=el('g',{class:'tr'},s);
+  el('line',{x1:0,y1:0,x2:-120,y2:-80,stroke:'#cbd5e1','stroke-width':5,'stroke-linecap':'round'},wire);
+  const smoke=el('g',{opacity:0,class:'tr'},s);
+  [0,1,2].forEach(i=>el('circle',{cx:300+i*10,cy:160-i*14,r:6+i*3,fill:'#9aa7b6',opacity:.25},smoke));
+  // positions
+  const ironAway='translate(30 60) rotate(30 0 0)', ironOn='translate(48 80) rotate(38 0 0)';
+  const ironPos= sI>=1&&sI<=3 ? ironOn : ironAway;
+  iron.setAttribute('transform', sI>=1&&sI<=3?'translate(66 50) rotate(42)':'translate(10 0) rotate(20)');
+  wire.setAttribute('transform', sI===2?'translate(298 186)':'translate(470 120)');
+  heat.setAttribute('opacity', sI>=1&&sI<=3?.35:(sI===4?.15:0));
+  smoke.setAttribute('opacity', sI===2||sI===3?1:0);
+  if(sI>=2){fil.setAttribute('d','M222 192 Q262 188 276 140 L284 140 Q298 188 338 192 Z')}
+  if(sI===5){fil.setAttribute('fill','#e2e8f0')}
+  const t=sSteps[sI];$('solderTxt').innerHTML='<b>'+t[0]+'</b> — '+t[1];
+  $('sPrev').disabled=sI===0;
+}
+$('sNext').onclick=()=>{sI=Math.min(5,sI+1);drawSolder()};
+$('sPrev').onclick=()=>{sI=Math.max(0,sI-1);drawSolder()};
+$('sPlay').onclick=async()=>{if(playing)return;playing=true;for(sI=0;sI<=5;sI++){drawSolder();await sleep(1700)}sI=5;playing=false};
+drawSolder();
+
+// ===== giunti
+const joints={
+  'Corretto':['M150 160 Q240 156 252 70 L262 70 Q274 156 370 160 Z','#e2e8f0','<b>Giunto corretto</b>: forma a vulcano/cono con lati <b>concavi</b>, bordi sottili che sfumano sulla piazzola, superficie lucida (opaca‑satinata se senza piombo), reoforo visibile in cima. Lo stagno ha bagnato sia il rame sia il reoforo.',true],
+  'Freddo':['M200 160 Q200 110 257 108 Q314 110 314 160 Z','#94a3b8','<b>Giunto freddo</b>: opaco, granuloso, a volte con una crepa attorno al reoforo. Lo stagno è fuso ma i pezzi non erano abbastanza caldi. Il contatto è incerto e cede col tempo. <i>Rimedio:</i> flussante e riscalda bene piazzola e reoforo insieme.',false],
+  'Troppo stagno':['M170 160 C150 60 360 60 340 160 Z','#e2e8f0','<b>Troppo stagno</b>: una palla convessa che nasconde il giunto. Non si vede se ha bagnato la piazzola; rischio di ponti. <i>Rimedio:</i> togli l\'eccesso con la treccia.',false],
+  'Poco stagno':['M222 160 Q252 156 254 132 L260 132 Q262 156 292 160 Z','#e2e8f0','<b>Poco stagno</b>: la piazzola non è coperta del tutto, il giunto è debole meccanicamente. <i>Rimedio:</i> riscalda e aggiungi un po\' di stagno.',false],
+  'Non bagnato':['M232 160 L232 160 Q240 100 257 96 Q274 100 282 160 Z','#e2e8f0','<b>Piazzola non bagnata</b>: lo stagno si è attaccato solo al reoforo, con un angolo netto sulla piazzola. Causa tipica: piazzola ossidata o punta che scaldava solo il reoforo. <i>Rimedio:</i> flussante, punta su entrambi.',false],
+  'Ponte':['M150 160 Q240 156 252 70 L262 70 Q274 156 370 160 Z','#e2e8f0','<b>Ponte</b>: lo stagno collega due piazzole vicine creando un cortocircuito. <i>Rimedio:</i> flussante e passa la punta pulita tra i due giunti, oppure treccia dissaldante.',true]
+};
+let jSel='Corretto';
+function drawJoint(){
+  const s=$('jointSvg');s.innerHTML='';
+  el('rect',{x:40,y:168,width:480,height:40,fill:'#14532d'},s);
+  el('rect',{x:150,y:160,width:220,height:10,fill:'#d97706'},s);
+  if(jSel==='Ponte'){el('rect',{x:400,y:160,width:90,height:10,fill:'#d97706'},s);el('path',{d:'M340 160 Q390 120 470 160 Z',fill:'#e2e8f0'},s);el('rect',{x:442,y:100,width:8,height:110,fill:'#9ca3af'},s);el('path',{d:'M400 160 Q440 150 442 120 L450 120 Q452 150 490 160 Z',fill:'#e2e8f0'},s)}
+  el('rect',{x:253,y:40,width:8,height:180,fill:'#9ca3af'},s);
+  const j=joints[jSel];
+  const p=el('path',{d:j[0],fill:j[1],opacity:0},s);
+  setTimeout(()=>{p.style.transition='opacity .6s';p.setAttribute('opacity',1)},30);
+  if(jSel==='Freddo'){el('path',{d:'M248 112 Q240 130 246 150',stroke:'#475569','stroke-width':2,fill:'none'},s)}
+  const ok=j[3];
+  el('circle',{cx:480,cy:50,r:22,fill:ok?'#36d399':'#f87171'},s);
+  el('text',{x:480,y:57,'text-anchor':'middle','font-size':20,'font-weight':800,fill:'#0d1117'},s,ok&&jSel==='Corretto'?'✓':'✗');
+  el('text',{x:60,y:232,fill:'#9aa7b6','font-size':11},s,'sezione: scheda (verde) · piazzola (rame) · reoforo (grigio) · stagno (chiaro)');
+  $('jointTxt').innerHTML=j[2];
+  document.querySelectorAll('#jBtns button').forEach(b=>b.classList.toggle('on',b.textContent===jSel));
+}
+joints['Ponte'][3]=false;
+Object.keys(joints).forEach(k=>{const b=document.createElement('button');b.textContent=k;b.onclick=()=>{jSel=k;drawJoint()};$('jBtns').appendChild(b)});
+drawJoint();
+
+// ===== giunzione con guaina
+async function splice(){
+  const s=$('spliceSvg');s.innerHTML='';const T=$('spliceTxt');
+  const wl=el('g',{class:'tr'},s),wr=el('g',{class:'tr'},s);
+  el('rect',{x:0,y:84,width:200,height:22,rx:8,fill:'#ef4444'},wl);el('rect',{x:200,y:90,width:44,height:10,fill:'#d97706'},wl);
+  el('rect',{x:316,y:84,width:244,height:22,rx:8,fill:'#ef4444'},wr);el('rect',{x:272,y:90,width:44,height:10,fill:'#d97706'},wr);
+  const hs=el('rect',{x:400,y:78,width:110,height:34,rx:8,fill:'#111827',stroke:'#4b5563','stroke-width':2,class:'tr'},s);
+  wl.setAttribute('transform','translate(-40 0)');wr.setAttribute('transform','translate(40 0)');
+  T.innerHTML='<b>1.</b> Spela 8–10 mm per lato e <b>infila la guaina</b> su uno dei due cavi, lontano dalla zona di lavoro.';await sleep(1800);
+  wl.setAttribute('transform','translate(20 0)');wr.setAttribute('transform','translate(-20 0)');
+  T.innerHTML='<b>2.</b> Sovrapponi o intreccia i fili (giunzione "linesman" o affiancata): il giunto deve reggere già meccanicamente prima dello stagno.';await sleep(1800);
+  const tin=el('rect',{x:220,y:88,width:0,height:14,rx:4,fill:'#cbd5e1'},s);tin.style.transition='width 1.2s';
+  const glow=el('ellipse',{cx:260,cy:95,rx:40,ry:20,fill:'#fb923c',opacity:.35,class:'glow'},s);
+  T.innerHTML='<b>3.</b> Scalda da sotto, stagno da sopra: lo stagno penetra tra i fili. Il giunto finito è liscio, senza punte.';
+  await sleep(50);tin.setAttribute('width',80);await sleep(1800);glow.remove();
+  hs.setAttribute('x',200);await sleep(900);
+  T.innerHTML='<b>4.</b> Lascia raffreddare, porta la guaina sopra il giunto centrandola e restringila con l\'aria calda (dal centro verso le estremità).';
+  hs.style.transition='all 1.2s';hs.setAttribute('y',84);hs.setAttribute('height',22);hs.setAttribute('fill','#0b0f16');await sleep(1600);
+  T.innerHTML='<b>5.</b> Fatto. Per i cavi di potenza usa guaina <b>con colla</b> (adesiva): sigilla dall\'umidità e sostiene il giunto contro le vibrazioni.';
+}
+$('hsPlay').onclick=splice;
+
+// ===== saldatura a punti
+async function spot(){
+  const s=$('swSvg');s.innerHTML='';const T=$('swTxt');
+  el('rect',{x:120,y:170,width:320,height:70,fill:'#475569'},s);
+  el('text',{x:280,y:226,'text-anchor':'middle',fill:'#cbd5e1','font-size':12},s,'fondello della cella (acciaio nichelato)');
+  el('rect',{x:120,y:160,width:320,height:10,fill:'#d1d5db'},s);
+  el('text',{x:450,y:168,fill:'#9aa7b6','font-size':11},s,'lamella');
+  const L=el('g',{class:'tr'},s),R=el('g',{class:'tr'},s);
+  [[L,240],[R,316]].forEach(([g,x])=>{el('rect',{x:x-6,y:0,width:12,height:100,fill:'#b45309'},g);el('path',{d:`M${x-6} 100 L${x} 122 L${x+6} 100 Z`,fill:'#d97706'},g)});
+  L.setAttribute('transform','translate(0 -10)');R.setAttribute('transform','translate(0 -10)');
+  T.innerHTML='<b>1. Appoggio.</b> I due elettrodi di rame scendono sulla lamella, a 2–4 mm di distanza tra loro.';
+  await sleep(1300);
+  L.setAttribute('transform','translate(0 38)');R.setAttribute('transform','translate(0 38)');
+  await sleep(900);
+  T.innerHTML='<b>2. Pressione.</b> Premi in modo deciso e uguale: il contatto deve essere pieno su entrambe le punte.';
+  await sleep(1300);
+  const path=el('path',{d:'M240 160 L240 178 Q278 196 316 178 L316 160',fill:'none',stroke:'#fbbf24','stroke-width':4,class:'flow'},s);
+  const f1=el('circle',{cx:240,cy:163,r:16,fill:'#fff7ed',opacity:.9},s),f2=el('circle',{cx:316,cy:163,r:16,fill:'#fff7ed',opacity:.9},s);
+  T.innerHTML='<b>3. Impulso.</b> Per pochi millisecondi passano centinaia o migliaia di ampere: entrano da un elettrodo, attraversano lamella e fondello, escono dall\'altro. Il calore si concentra nei punti di contatto.';
+  await sleep(250);f1.remove();f2.remove();
+  await sleep(1500);path.remove();
+  [240,316].forEach(x=>{el('ellipse',{cx:x,cy:166,rx:7,ry:6,fill:'#fb923c'},s);el('ellipse',{cx:x,cy:166,rx:12,ry:9,fill:'none',stroke:'#60a5fa','stroke-width':2,opacity:.7},s)});
+  L.setAttribute('transform','translate(0 -10)');R.setAttribute('transform','translate(0 -10)');
+  T.innerHTML='<b>4. Nocciolo.</b> Sotto ogni punta si è formato un piccolo nocciolo di metallo fuso tra lamella e cella. L\'alone colorato attorno è normale. Il calore resta localizzato: la cella si scalda appena.';
+  await sleep(1800);
+  T.innerHTML+=' <br><b>5. Ripeti</b> spostandoti di qualche millimetro: 2 impulsi per cella su ogni lamella, poi test di strappo sulla prova.';
+}
+$('swPlay').onclick=spot;
+
+// ===== allenamento
+const train=['Stagnare 10 spezzoni di cavo AWG 20 finché lo stagno penetra senza goccia esterna','Saldare 20 resistenze su una millefori: tutti i giunti a cono, nessun ponte','Dissaldare 10 di quelle resistenze con la pompetta e 10 con la treccia, senza staccare piazzole','Saldare una fila di pin header (striscia di 20 pin) dritta e perfetta','Kit elettronico per principianti (es. LED lampeggiante o sirena) funzionante al primo colpo','Giunzione in linea di cavi AWG 16 con guaina termorestringente, che regge una trazione decisa','Saldare un connettore XT60 (poi XT90) a cavi AWG 12/10 senza deformare la plastica','Saldatrice a punti: trovare la regolazione giusta su celle di scarto con il test di strappo','Saldatrice a punti: un piccolo pacco di prova 2S2P con celle di scarto, compresi i fili di bilanciamento','Saldare cavi sulle piazzole di un BMS di scarto o su una basetta di prova'];
+(function(){const st=store.get('solderTrain',{});const ul=$('trainList');
+  const r=()=>{ul.innerHTML=train.map((t,i)=>`<li class="${st[i]?'done':''}"><input type="checkbox" data-i="${i}" ${st[i]?'checked':''}><span>${t}</span></li>`).join('');
+  ul.querySelectorAll('input').forEach(c=>c.onchange=()=>{st[c.dataset.i]=c.checked;store.set('solderTrain',st);r()})};r()})();
+</script>
+</body>
+</html>
